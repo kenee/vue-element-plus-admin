@@ -20,12 +20,12 @@ export class TransformInterceptor<T>
         context: ExecutionContext,
         next: CallHandler,
     ): Observable<Response<T>> {
-        return next.handle().pipe(
-            map((data) => ({
-                code: 200, // Using 200 as SUCCESS_CODE
-                data,
-                message: 'success',
-            })),
-        );
+    return next.handle().pipe(
+      map((data) => ({
+        code: 0, // 前端期望 SUCCESS_CODE = 0
+        data,
+        message: 'success',
+      })),
+    );
     }
 }

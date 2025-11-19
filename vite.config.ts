@@ -135,7 +135,28 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         '/api': {
           target: 'http://localhost:3000',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
+          // 后端已经添加了 /api 前缀，所以不需要重写路径
+          // rewrite: (path) => path.replace(/^\/api/, ''),
+          configure: (proxy, options) => {
+            proxy.on('proxyReq', (proxyReq, req, res) => {
+              const targetUrl = `${options.target}${req.url}`
+              console.log(`\n[代理请求] ${req.method} ${req.url}`)
+              console.log(`[代理目标] ${targetUrl}`)
+              if ((req as any).body) {
+                console.log(`[请求体]`, JSON.stringify((req as any).body, null, 2))
+              }
+            })
+            proxy.on('proxyRes', (proxyRes, req, res) => {
+              const statusCode = proxyRes.statusCode || 0
+              console.log(`[代理响应] ${req.url} -> 状态码: ${statusCode}`)
+              if (statusCode >= 400) {
+                console.warn(`[警告] 请求失败，状态码: ${statusCode}`)
+              }
+            })
+            proxy.on('error', (err, req, res) => {
+              console.error(`[代理错误] ${req.url}:`, err.message)
+            })
+          }
         }
       },
       hmr: {
