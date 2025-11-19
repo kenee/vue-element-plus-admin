@@ -10,7 +10,7 @@ import { EChartsOption } from 'echarts'
 import { radarOption } from './echarts-data'
 import { Highlight } from '@/components/Highlight'
 import {
-  getCountApi,
+  getWorkplaceTotalApi,
   getProjectApi,
   getDynamicApi,
   getTeamApi,
@@ -101,7 +101,13 @@ const getRadar = async () => {
 }
 
 const getAllApi = async () => {
-  await Promise.all([getCount(), getProject(), getDynamic(), getTeam(), getRadar()])
+  const res = await Promise.all([
+    getWorkplaceTotalApi(),
+    getProjectApi(),
+    getDynamicApi(),
+    getTeamApi(),
+    getRadarApi()
+  ])
   loading.value = false
 }
 

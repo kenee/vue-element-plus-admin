@@ -18,7 +18,7 @@ import { WorkplaceModule } from './workplace/workplace.module';
             username: 'root',
             password: 'root',
             database: 'nest_admin',
-            entities: [],
+            autoLoadEntities: true,
             synchronize: true,
         }),
         UserModule,

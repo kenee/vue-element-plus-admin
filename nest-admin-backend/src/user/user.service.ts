@@ -39,4 +39,9 @@ export class UserService {
   remove(id: string) {
     return this.userRepository.delete(id);
   }
+
+  async assignRoles(user: User, roles: any[]) {
+    user.roles = roles;
+    return this.userRepository.save(user);
+  }
 }

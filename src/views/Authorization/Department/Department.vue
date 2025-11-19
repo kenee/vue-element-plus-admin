@@ -7,7 +7,7 @@ import { ElTag } from 'element-plus'
 import { Table } from '@/components/Table'
 import {
   getDepartmentApi,
-  getDepartmentTableApi,
+  getDepartmentListApi,
   saveDepartmentApi,
   deleteDepartmentApi
 } from '@/api/department'
@@ -24,7 +24,7 @@ const ids = ref<string[]>([])
 const { tableRegister, tableState, tableMethods } = useTable({
   fetchDataApi: async () => {
     const { currentPage, pageSize } = tableState
-    const res = await getDepartmentTableApi({
+    const res = await getDepartmentListApi({
       pageIndex: unref(currentPage),
       pageSize: unref(pageSize),
       ...unref(searchParams)
