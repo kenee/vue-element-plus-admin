@@ -31,7 +31,7 @@ const getTotal = async () => {
   totalState = Object.assign(totalState, res?.data || {})
 }
 
-getCount()
+getTotal()
 </script>
 
 <template>
@@ -55,7 +55,7 @@ getCount()
                 <CountTo
                   class="text-20px font-700 text-right"
                   :start-val="0"
-                  :end-val="102400"
+                  :end-val="totalState.users"
                   :duration="2600"
                 />
               </div>
@@ -84,7 +84,7 @@ getCount()
                 <CountTo
                   class="text-20px font-700 text-right"
                   :start-val="0"
-                  :end-val="81212"
+                  :end-val="totalState.messages"
                   :duration="2600"
                 />
               </div>
@@ -113,7 +113,7 @@ getCount()
                 <CountTo
                   class="text-20px font-700 text-right"
                   :start-val="0"
-                  :end-val="9280"
+                  :end-val="totalState.moneys"
                   :duration="2600"
                 />
               </div>
@@ -142,7 +142,7 @@ getCount()
                 <CountTo
                   class="text-20px font-700 text-right"
                   :start-val="0"
-                  :end-val="13600"
+                  :end-val="totalState.shoppings"
                   :duration="2600"
                 />
               </div>
