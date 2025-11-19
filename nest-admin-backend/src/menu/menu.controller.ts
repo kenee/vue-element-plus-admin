@@ -14,6 +14,11 @@ export class MenuController {
     return this.menuService.create(createMenuDto);
   }
 
+  @Get('routes')
+  getRoutes() {
+    return this.menuService.getRoutes();
+  }
+
   @Get()
   findAll() {
     return this.menuService.findAll();

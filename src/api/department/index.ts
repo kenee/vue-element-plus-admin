@@ -1,5 +1,13 @@
 import request from '@/axios'
+import type { DepartmentItem } from './types'
 import { DepartmentListResponse, DepartmentUserParams, DepartmentUserResponse } from './types'
+
+export interface DepartmentParams {
+  name?: string
+  status?: number
+}
+
+export type DepartmentType = DepartmentItem
 
 export const getDepartmentApi = () => {
   return request.get<DepartmentListResponse>({ url: '/mock/department/list' })
@@ -25,6 +33,6 @@ export const deleteDepartmentApi = (ids: string[] | number[]) => {
   return request.post({ url: '/mock/department/delete', data: { ids } })
 }
 
-export const getDepartmentTableApi = (params: any) => {
-  return request.get({ url: '/mock/department/table/list', params })
+export const getDepartmentListApi = (params: DepartmentParams): Promise<IResponse<DepartmentType[]>> => {
+  return request.get({ url: '/api/department', params })
 }

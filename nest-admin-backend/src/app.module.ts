@@ -6,6 +6,8 @@ import { RoleModule } from './role/role.module';
 import { MenuModule } from './menu/menu.module';
 import { DepartmentModule } from './department/department.module';
 import { DictionaryModule } from './dictionary/dictionary.module';
+import { AnalysisModule } from './analysis/analysis.module';
+import { WorkplaceModule } from './workplace/workplace.module';
 
 @Module({
     imports: [
@@ -25,6 +27,8 @@ import { DictionaryModule } from './dictionary/dictionary.module';
         MenuModule,
         DepartmentModule,
         DictionaryModule,
+        AnalysisModule,
+        WorkplaceModule,
     ],
     controllers: [],
     providers: [],

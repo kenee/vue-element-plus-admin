@@ -1,5 +1,9 @@
 import request from '@/axios'
 
-export const getMenuListApi = () => {
-  return request.get({ url: '/mock/menu/list' })
+export interface MenuParams {
+  title?: string
+}
+
+export const getMenuListApi = (params: MenuParams): Promise<IResponse<AppCustomRouteRecordRaw[]>> => {
+  return request.get({ url: '/api/menu', params })
 }

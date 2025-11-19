@@ -6,7 +6,7 @@ import VueJsx from '@vitejs/plugin-vue-jsx'
 import progress from 'vite-plugin-progress'
 import EslintPlugin from 'vite-plugin-eslint'
 import { ViteEjsPlugin } from 'vite-plugin-ejs'
-import { viteMockServe } from 'vite-plugin-mock'
+
 import PurgeIcons from 'vite-plugin-purge-icons'
 import ServerUrlCopy from 'vite-plugin-url-copy'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
@@ -44,20 +44,20 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       progress(),
       env.VITE_USE_ALL_ELEMENT_PLUS_STYLE === 'false'
         ? createStyleImportPlugin({
-            resolves: [ElementPlusResolve()],
-            libs: [
-              {
-                libraryName: 'element-plus',
-                esModule: true,
-                resolveStyle: (name) => {
-                  if (name === 'click-outside') {
-                    return ''
-                  }
-                  return `element-plus/es/components/${name.replace(/^el-/, '')}/style/css`
+          resolves: [ElementPlusResolve()],
+          libs: [
+            {
+              libraryName: 'element-plus',
+              esModule: true,
+              resolveStyle: (name) => {
+                if (name === 'click-outside') {
+                  return ''
                 }
+                return `element-plus/es/components/${name.replace(/^el-/, '')}/style/css`
               }
-            ]
-          })
+            }
+          ]
+        })
         : undefined,
       EslintPlugin({
         cache: false,
@@ -76,19 +76,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         svgoOptions: true
       }),
       PurgeIcons(),
-      env.VITE_USE_MOCK === 'true'
-        ? viteMockServe({
-            ignore: /^\_/,
-            mockPath: 'mock',
-            localEnabled: !isBuild,
-            prodEnabled: isBuild,
-            injectCode: `
-          import { setupProdMockServer } from '../mock/_createProductionServer'
 
-          setupProdMockServer()
-          `
-          })
-        : undefined,
       ViteEjsPlugin({
         title: env.VITE_APP_TITLE
       }),
@@ -145,7 +133,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       proxy: {
         // 选项写法
         '/api': {
-          target: 'http://127.0.0.1:8000',
+          target: 'http://localhost:3000',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
         }
