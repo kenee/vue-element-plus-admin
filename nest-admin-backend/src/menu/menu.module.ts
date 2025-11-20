@@ -1,13 +1,14 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { MenuService } from './menu.service';
-import { MenuController } from './menu.controller';
-import { Menu } from './entities/menu.entity';
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { MenuService } from './menu.service'
+import { MenuController } from './menu.controller'
+import { Menu } from './entities/menu.entity'
+import { UserModule } from '../user/user.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Menu])],
+  imports: [TypeOrmModule.forFeature([Menu]), UserModule],
   controllers: [MenuController],
   providers: [MenuService],
-  exports: [MenuService],
+  exports: [MenuService]
 })
-export class MenuModule { }
+export class MenuModule {}

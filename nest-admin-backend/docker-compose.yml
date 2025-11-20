@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8.2
     container_name: nest-admin-mysql
     restart: always
     environment:
