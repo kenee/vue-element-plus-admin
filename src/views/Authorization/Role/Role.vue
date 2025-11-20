@@ -1,10 +1,10 @@
 <script setup lang="tsx">
 import { reactive, ref, unref } from 'vue'
-import { getRoleListApi } from '@/api/role'
+import { getRoleListApi, saveRoleApi, updateRoleApi, deleteRoleApi } from '@/api/role'
 import { useTable } from '@/hooks/web/useTable'
 import { useI18n } from '@/hooks/web/useI18n'
 import { Table, TableColumn } from '@/components/Table'
-import { ElTag } from 'element-plus'
+import { ElTag, ElMessageBox, ElMessage } from 'element-plus'
 import { Search } from '@/components/Search'
 import { FormSchema } from '@/components/Form'
 import { ContentWrap } from '@/components/ContentWrap'
@@ -76,7 +76,9 @@ const tableColumns = reactive<TableColumn[]>([
             <BaseButton type="success" onClick={() => action(row, 'detail')}>
               {t('exampleDemo.detail')}
             </BaseButton>
-            <BaseButton type="danger">{t('exampleDemo.del')}</BaseButton>
+            <BaseButton type="danger" onClick={() => delData(row)}>
+              {t('exampleDemo.del')}
+            </BaseButton>
           </>
         )
       }
@@ -108,6 +110,30 @@ const writeRef = ref<ComponentRef<typeof Write>>()
 
 const saveLoading = ref(false)
 
+const delLoading = ref(false)
+
+const delData = async (row: any) => {
+  try {
+    await ElMessageBox.confirm(t('common.delMessage'), t('common.reminder'), {
+      confirmButtonText: t('common.ok'),
+      cancelButtonText: t('common.cancel'),
+      type: 'warning'
+    })
+    delLoading.value = true
+    const res = await deleteRoleApi(row.id)
+    if (res) {
+      ElMessage.success(t('common.delSuccess'))
+      getList()
+    }
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      console.log(error)
+    }
+  } finally {
+    delLoading.value = false
+  }
+}
+
 const action = (row: any, type: string) => {
   dialogTitle.value = t(type === 'edit' ? 'exampleDemo.edit' : 'exampleDemo.detail')
   actionType.value = type
@@ -127,10 +153,29 @@ const save = async () => {
   const formData = await write?.submit()
   if (formData) {
     saveLoading.value = true
-    setTimeout(() => {
+    try {
+      // 判断是新增还是编辑
+      if (formData.id) {
+        // 编辑：使用 PATCH 更新
+        const { id, ...updateData } = formData
+        const res = await updateRoleApi(id, updateData)
+        if (res) {
+          dialogVisible.value = false
+          getList()
+        }
+      } else {
+        // 新增：使用 POST 创建
+        const res = await saveRoleApi(formData)
+        if (res) {
+          dialogVisible.value = false
+          getList()
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
       saveLoading.value = false
-      dialogVisible.value = false
-    }, 1000)
+    }
   }
 }
 </script>

@@ -100,7 +100,6 @@ const nodeClick = (treeData: any) => {
 
 const rules = reactive({
   roleName: [required()],
-  role: [required()],
   status: [required()]
 })
 
@@ -109,9 +108,9 @@ const { setValues, getFormData, getElFormExpose } = formMethods
 
 const treeData = ref([])
 const getMenuList = async () => {
-  const res = await getMenuListApi()
-  if (res) {
-    treeData.value = res.data.list
+  const res = await getMenuListApi({})
+  if (res && res.data) {
+    treeData.value = (res.data as any).list || []
     if (!props.currentRow) return
     await nextTick()
     const checked: any[] = []
@@ -153,7 +152,22 @@ const submit = async () => {
     const data = filter(unref(treeData), (item: any) => {
       return checkedKeys.includes(item.id)
     })
+    // 将菜单数组转换为菜单 ID 数组，供后端使用
+    formData.menuIds = checkedKeys
+    // 保留 menu 字段供前端使用（如果需要）
     formData.menu = data || []
+    // 如果没有 roleValue，尝试从 role 字段获取，或者从 roleName 自动生成
+    if (!formData.roleValue) {
+      if (formData.role) {
+        formData.roleValue = formData.role
+      } else if (formData.roleName) {
+        // 从 roleName 自动生成（转小写、去除空格、特殊字符）
+        formData.roleValue = formData.roleName
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '')
+      }
+    }
     console.log(formData)
     return formData
   }
@@ -163,7 +177,12 @@ watch(
   () => props.currentRow,
   (currentRow) => {
     if (!currentRow) return
-    setValues(currentRow)
+    // 将前端的 role 字段映射为 roleValue（后端期望的字段名）
+    const formData = { ...currentRow }
+    if (formData.role && !formData.roleValue) {
+      formData.roleValue = formData.role
+    }
+    setValues(formData)
   },
   {
     deep: true,
