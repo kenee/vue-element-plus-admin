@@ -6,6 +6,7 @@ export interface DepartmentItem {
 
 export interface DepartmentListResponse {
   list: DepartmentItem[]
+  total: number
 }
 
 export interface DepartmentUserParams {

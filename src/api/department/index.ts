@@ -5,34 +5,53 @@ import { DepartmentListResponse, DepartmentUserParams, DepartmentUserResponse } 
 export interface DepartmentParams {
   name?: string
   status?: number
+  pageIndex?: number
+  pageSize?: number
 }
 
 export type DepartmentType = DepartmentItem
 
-export const getDepartmentApi = () => {
-  return request.get<DepartmentListResponse>({ url: '/mock/department/list' })
+export const getDepartmentApi = (params?: DepartmentParams) => {
+  return request.get<DepartmentListResponse>({ url: '/api/department', params })
 }
 
 export const getUserByIdApi = (params: DepartmentUserParams) => {
-  return request.get<DepartmentUserResponse>({ url: '/mock/department/users', params })
+  const query = {
+    page: params.pageIndex,
+    pageSize: params.pageSize,
+    deptId: params.id,
+    username: params.account,
+    nickname: params.username
+  }
+  return request.get<DepartmentUserResponse>({ url: '/api/user', params: query })
 }
 
 export const deleteUserByIdApi = (ids: string[] | number[]) => {
-  return request.post({ url: '/mock/department/user/delete', data: { ids } })
+  return request.post({ url: '/api/user/delete', data: { ids } })
 }
 
 export const saveUserApi = (data: any) => {
-  return request.post({ url: '/mock/department/user/save', data })
+  if (data.id) {
+    return request.patch({ url: `/api/user/${data.id}`, data })
+  } else {
+    return request.post({ url: '/api/user', data })
+  }
 }
 
 export const saveDepartmentApi = (data: any) => {
-  return request.post({ url: '/mock/department/save', data })
+  if (data.id) {
+    return request.patch({ url: `/api/department/${data.id}`, data })
+  } else {
+    return request.post({ url: '/api/department', data })
+  }
 }
 
 export const deleteDepartmentApi = (ids: string[] | number[]) => {
-  return request.post({ url: '/mock/department/delete', data: { ids } })
+  return request.post({ url: '/api/department/delete', data: { ids } })
 }
 
-export const getDepartmentListApi = (params: DepartmentParams): Promise<IResponse<DepartmentType[]>> => {
+export const getDepartmentListApi = (
+  params: DepartmentParams
+): Promise<IResponse<DepartmentListResponse>> => {
   return request.get({ url: '/api/department', params })
 }

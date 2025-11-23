@@ -21,6 +21,12 @@ import { set } from 'lodash-es'
 
 const loading = ref(true)
 
+// Restore these declarations
+let projects = reactive<Project[]>([])
+let dynamics = reactive<Dynamic[]>([])
+let team = reactive<Team[]>([])
+const radarOptionData = reactive<EChartsOption>(radarOption) as EChartsOption
+
 // 获取统计数
 let totalSate = reactive<WorkplaceTotal>({
   project: 0,
@@ -28,85 +34,58 @@ let totalSate = reactive<WorkplaceTotal>({
   todo: 0
 })
 
-const getCount = async () => {
-  const res = await getCountApi().catch(() => {})
-  if (res) {
-    totalSate = Object.assign(totalSate, res.data)
-  }
-}
-
-let projects = reactive<Project[]>([])
-
-// 获取项目数
-const getProject = async () => {
-  const res = await getProjectApi().catch(() => {})
-  if (res) {
-    projects = Object.assign(projects, res.data)
-  }
-}
-
-// 获取动态
-let dynamics = reactive<Dynamic[]>([])
-
-const getDynamic = async () => {
-  const res = await getDynamicApi().catch(() => {})
-  if (res) {
-    dynamics = Object.assign(dynamics, res.data)
-  }
-}
-
-// 获取团队
-let team = reactive<Team[]>([])
-
-const getTeam = async () => {
-  const res = await getTeamApi().catch(() => {})
-  if (res) {
-    team = Object.assign(team, res.data)
-  }
-}
-
-// 获取指数
-const radarOptionData = reactive<EChartsOption>(radarOption) as EChartsOption
-
-const getRadar = async () => {
-  const res = await getRadarApi().catch(() => {})
-  if (res) {
-    set(
-      radarOptionData,
-      'radar.indicator',
-      res.data.map((v) => {
-        return {
-          name: t(v.name),
-          max: v.max
-        }
-      })
-    )
-    set(radarOptionData, 'series', [
-      {
-        name: `xxx${t('workplace.index')}`,
-        type: 'radar',
-        data: [
-          {
-            value: res.data.map((v) => v.personal),
-            name: t('workplace.personal')
-          },
-          {
-            value: res.data.map((v) => v.team),
-            name: t('workplace.team')
-          }
-        ]
-      }
-    ])
-  }
-}
-
 const getAllApi = async () => {
-  const res = await Promise.all([
-    getWorkplaceTotalApi(),
-    getProjectApi(),
-    getDynamicApi(),
-    getTeamApi(),
-    getRadarApi()
+  await Promise.all([
+    getWorkplaceTotalApi().then((res) => {
+      if (res) {
+        totalSate = Object.assign(totalSate, res.data)
+      }
+    }),
+    getProjectApi().then((res) => {
+      if (res) {
+        projects = Object.assign(projects, res.data)
+      }
+    }),
+    getDynamicApi().then((res) => {
+      if (res) {
+        dynamics = Object.assign(dynamics, res.data)
+      }
+    }),
+    getTeamApi().then((res) => {
+      if (res) {
+        team = Object.assign(team, res.data)
+      }
+    }),
+    getRadarApi().then((res) => {
+      if (res) {
+        set(
+          radarOptionData,
+          'radar.indicator',
+          res.data.map((v) => {
+            return {
+              name: t(v.name),
+              max: v.max
+            }
+          })
+        )
+        set(radarOptionData, 'series', [
+          {
+            name: `xxx${t('workplace.index')}`,
+            type: 'radar',
+            data: [
+              {
+                value: res.data.map((v) => v.personal),
+                name: t('workplace.personal')
+              },
+              {
+                value: res.data.map((v) => v.team),
+                name: t('workplace.team')
+              }
+            ]
+          }
+        ])
+      }
+    })
   ])
   loading.value = false
 }
