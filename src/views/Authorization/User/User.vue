@@ -147,7 +147,7 @@ const crudSchemas = reactive<CrudSchema[]>([
     field: 'createTime',
     label: t('userDemo.createTime'),
     form: {
-      component: 'Input'
+      hidden: true
     },
     search: {
       hidden: true
@@ -263,7 +263,12 @@ const delData = async (row?: DepartmentUserItem) => {
 const action = (row: DepartmentUserItem, type: string) => {
   dialogTitle.value = t(type === 'edit' ? 'exampleDemo.edit' : 'exampleDemo.detail')
   actionType.value = type
-  currentRow.value = { ...row, department: unref(treeEl)?.getCurrentNode() || {} }
+  currentRow.value = {
+    ...row,
+    department: unref(treeEl)?.getCurrentNode() || {},
+    role: row.roles ? row.roles.map((v) => v.id) : [],
+    account: row.username
+  }
   dialogVisible.value = true
 }
 

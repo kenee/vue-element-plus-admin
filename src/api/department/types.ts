@@ -2,6 +2,10 @@ export interface DepartmentItem {
   id: string
   departmentName: string
   children?: DepartmentItem[]
+  status: number
+  sort: number
+  remark: string
+  createTime: string
 }
 
 export interface DepartmentListResponse {
@@ -23,7 +27,8 @@ export interface DepartmentUserItem {
   account: string
   email: string
   createTime: string
-  role: string
+  role: string[]
+  roles?: any[]
   department: DepartmentItem
 }
 

@@ -220,15 +220,19 @@ export class MenuService {
     // 第二遍：构建树形结构
     menus.forEach((menu) => {
       const route = menuMap.get(menu.id)!
-      if (menu.parentId && menuMap.has(menu.parentId)) {
-        // 有父节点，添加到父节点的 children
-        const parent = menuMap.get(menu.parentId)!
-        if (!parent.children) {
-          parent.children = []
+      if (menu.parentId) {
+        // 如果有 parentId
+        if (menuMap.has(menu.parentId)) {
+          // 父节点存在（未被禁用），添加到父节点的 children
+          const parent = menuMap.get(menu.parentId)!
+          if (!parent.children) {
+            parent.children = []
+          }
+          parent.children.push(route)
         }
-        parent.children.push(route)
+        // 如果父节点不存在（可能被禁用），则忽略该节点，不将其作为根节点显示
       } else {
-        // 根节点
+        // 没有 parentId，确实是根节点
         rootRoutes.push(route)
       }
     })
@@ -440,6 +444,21 @@ export class MenuService {
   }
 
   update(id: string, updateMenuDto: UpdateMenuDto) {
+    // 移除 children 属性，避免 TypeORM 报错 "Property children was not found in Menu"
+    if ((updateMenuDto as any).children) {
+      delete (updateMenuDto as any).children
+    }
+    // 移除其他可能导致问题的字段
+    if ((updateMenuDto as any).id) {
+      delete (updateMenuDto as any).id
+    }
+    if ((updateMenuDto as any).createTime) {
+      delete (updateMenuDto as any).createTime
+    }
+    if ((updateMenuDto as any).updateTime) {
+      delete (updateMenuDto as any).updateTime
+    }
+
     return this.menuRepository.update(id, updateMenuDto)
   }
 

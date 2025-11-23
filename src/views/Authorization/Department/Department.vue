@@ -81,7 +81,7 @@ const crudSchemas = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'id',
+    field: 'departmentName',
     label: t('userDemo.departmentName'),
     table: {
       slots: {
@@ -89,6 +89,26 @@ const crudSchemas = reactive<CrudSchema[]>([
           return <>{data.row.departmentName}</>
         }
       }
+    },
+    detail: {
+      slots: {
+        default: (data: any) => {
+          return <>{data.departmentName}</>
+        }
+      }
+    }
+  },
+  {
+    field: 'parentId',
+    label: '上级部门',
+    search: {
+      hidden: true
+    },
+    table: {
+      hidden: true
+    },
+    detail: {
+      hidden: true
     },
     form: {
       component: 'TreeSelect',
@@ -101,13 +121,6 @@ const crudSchemas = reactive<CrudSchema[]>([
       optionApi: async () => {
         const res = await getDepartmentApi()
         return res.data.list
-      }
-    },
-    detail: {
-      slots: {
-        default: (data: any) => {
-          return <>{data.departmentName}</>
-        }
       }
     }
   },

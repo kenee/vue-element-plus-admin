@@ -9,6 +9,18 @@ export class DepartmentItemDto {
 
   @ApiProperty({ description: 'Child departments', type: [DepartmentItemDto], required: false })
   children?: DepartmentItemDto[]
+
+  @ApiProperty({ description: 'Status' })
+  status: number
+
+  @ApiProperty({ description: 'Sort' })
+  sort: number
+
+  @ApiProperty({ description: 'Remark', required: false })
+  remark?: string
+
+  @ApiProperty({ description: 'Create Time' })
+  createTime: Date
 }
 
 export class DepartmentListResponseDto {

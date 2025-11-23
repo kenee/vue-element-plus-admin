@@ -39,7 +39,11 @@ export class DepartmentService {
       const item: DepartmentItemDto = {
         id: dept.id,
         departmentName: dept.name, // 将 name 映射为 departmentName
-        children: []
+        children: [],
+        status: dept.status,
+        sort: dept.sort,
+        remark: dept.remark,
+        createTime: dept.createdAt
       }
       departmentMap.set(dept.id, item)
     })
@@ -80,6 +84,9 @@ export class DepartmentService {
     }
     if (updateDepartmentDto.children) {
       delete updateDepartmentDto.children
+    }
+    if ((updateDepartmentDto as any).createTime) {
+      delete (updateDepartmentDto as any).createTime
     }
     return this.departmentRepository.update(id, updateDepartmentDto)
   }

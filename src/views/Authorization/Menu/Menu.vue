@@ -1,10 +1,10 @@
 <script setup lang="tsx">
 import { reactive, ref, unref } from 'vue'
-import { getMenuListApi } from '@/api/menu'
+import { getMenuListApi, saveMenuApi, deleteMenuApi } from '@/api/menu'
 import { useTable } from '@/hooks/web/useTable'
 import { useI18n } from '@/hooks/web/useI18n'
 import { Table, TableColumn } from '@/components/Table'
-import { ElTag } from 'element-plus'
+import { ElTag, ElMessageBox } from 'element-plus'
 import { Icon } from '@/components/Icon'
 import { Search } from '@/components/Search'
 import { FormSchema } from '@/components/Form'
@@ -116,7 +116,9 @@ const tableColumns = reactive<TableColumn[]>([
             <BaseButton type="success" onClick={() => action(row, 'detail')}>
               {t('exampleDemo.detail')}
             </BaseButton>
-            <BaseButton type="danger">{t('exampleDemo.del')}</BaseButton>
+            <BaseButton type="danger" onClick={() => delData(row)}>
+              {t('exampleDemo.del')}
+            </BaseButton>
           </>
         )
       }
@@ -165,14 +167,37 @@ const AddAction = () => {
 const save = async () => {
   const write = unref(writeRef)
   const formData = await write?.submit()
-  console.log(formData)
   if (formData) {
     saveLoading.value = true
-    setTimeout(() => {
+    try {
+      // 确保 title 字段存在，后端实体需要 title
+      if (formData.meta && formData.meta.title) {
+        formData.title = formData.meta.title
+      }
+      const res = await saveMenuApi(formData)
+      if (res) {
+        dialogVisible.value = false
+        getList()
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
       saveLoading.value = false
-      dialogVisible.value = false
-    }, 1000)
+    }
   }
+}
+
+const delData = async (row: any) => {
+  ElMessageBox.confirm(t('common.delMessage'), t('common.delWarning'), {
+    confirmButtonText: t('common.delOk'),
+    cancelButtonText: t('common.delCancel'),
+    type: 'warning'
+  })
+    .then(async () => {
+      await deleteMenuApi(row.id)
+      getList()
+    })
+    .catch(() => {})
 }
 </script>
 

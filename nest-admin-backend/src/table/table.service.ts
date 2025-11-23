@@ -111,8 +111,15 @@ export class TableService {
     await this.tableRepository.update(id, updateTableDto)
     return this.findOne(id)
   }
-
   async save(body: any) {
+    // Map snake_case to camelCase for specific fields
+    if (body.display_time) {
+      body.displayTime = body.display_time
+    }
+    if (body.image_uri) {
+      body.imageUri = body.image_uri
+    }
+
     if (body.id) {
       return this.update(body.id, body)
     } else {

@@ -94,7 +94,50 @@ export class UserService {
     })
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    // 1. 处理 department
+    if (updateUserDto.department && updateUserDto.department.id) {
+      updateUserDto.deptId = updateUserDto.department.id
+    }
+    // 删除 department 属性，避免 TypeORM 报错
+    if (updateUserDto.department) {
+      delete updateUserDto.department
+    }
+
+    // 2. 处理 roles
+    let roles: any[] | undefined
+    // 注意：这里改为检查 updateUserDto.role 是否存在，允许空数组（表示清空角色）
+    if (updateUserDto.role) {
+      roles = updateUserDto.role.map((roleId) => ({ id: roleId }))
+      delete updateUserDto.role // 删除 role 属性
+    }
+
+    // 3. 如果有 roles 更新 (包括空数组)，使用 save (preload)
+    if (roles !== undefined) {
+      // 使用 preload 混合现有实体和新数据
+      const user = await this.userRepository.preload({
+        id,
+        ...updateUserDto,
+        roles
+      })
+      if (!user) {
+        throw new Error(`User #${id} not found`)
+      }
+      return this.userRepository.save(user)
+    }
+
+    // 4. 如果没有 roles 更新，使用 update (更高效)
+    // 确保没有 undefined 的 roles 属性传入 update
+    // 使用 as any 绕过类型检查，确保运行时删除多余属性
+    const dto: any = updateUserDto
+    if (dto.roles) {
+      delete dto.roles
+    }
+    if (dto.createdAt) delete dto.createdAt
+    if (dto.updatedAt) delete dto.updatedAt
+    if (dto.createTime) delete dto.createTime
+    if (dto.updateTime) delete dto.updateTime
+
     return this.userRepository.update(id, updateUserDto)
   }
 
