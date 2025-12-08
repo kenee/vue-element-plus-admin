@@ -95,6 +95,7 @@ public class JwtUtil {
      */
     public Claims getClaimsFromToken(String token) {
         return Jwts.parser()
+                .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

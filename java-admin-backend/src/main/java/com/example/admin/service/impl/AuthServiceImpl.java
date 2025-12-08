@@ -61,20 +61,28 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public ResponseResult<Map<String, Object>> refreshToken(String refreshToken) {
-        // TODO: 实现刷新token逻辑
-        return ResponseResult.success();
+        // 从刷新token中获取用户名
+        String username = jwtUtil.getUsernameFromToken(refreshToken);
+        
+        // 获取用户信息
+        SysUser user = sysUserService.findByUsername(username);
+        
+        // 生成新的token
+        Map<String, Object> tokenMap = generateToken(user);
+        
+        return ResponseResult.success(tokenMap);
     }
 
     @Override
     public Map<String, Object> generateToken(SysUser user) {
         // 生成token
         String token = jwtUtil.generateToken(user.getUsername());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
+        String newRefreshToken = jwtUtil.generateRefreshToken(user.getUsername());
 
         // 构建响应数据
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("accessToken", token);
-        tokenMap.put("refreshToken", refreshToken);
+        tokenMap.put("refreshToken", newRefreshToken);
         tokenMap.put("tokenType", "Bearer");
         tokenMap.put("expiresIn", jwtUtil.getExpiration());
         tokenMap.put("user", user);
