@@ -1,0 +1,87 @@
+# Java 25 + Spring Boot 4.0 版本实现计划
+
+## 一、项目目标
+实现一个与现有 Nest、Gin 版本功能完全对齐的 Java 25 + Spring Boot 4.0 后端版本，确保 API 一致性和功能完整性。
+
+## 二、当前状态分析
+- 已完成：SysUser 实体 JPA 转换、SysUserRepository 创建、JwtUtil 更新、基本 AuthController 和 UserController
+- 缺少：完整的 JPA 实体转换、Repository 接口、Service 实现、Controller 实现、角色/部门/字典管理模块、权限控制
+
+## 三、实现计划
+
+### 1. 实体层（Entity）
+- 将所有剩余实体从 MyBatis Plus 转换为 JPA 实体
+  - SysMenu、SysRole、SysRoleMenu、SysUserRole、SysDepartment、SysDictionary、SysDictionaryItem
+- 确保所有实体使用 UUID 作为主键，使用 JPA 注解
+- 建立正确的实体关系映射（@OneToMany、@ManyToOne、@ManyToMany）
+
+### 2. 数据访问层（Repository）
+- 为每个实体创建 JPA Repository 接口
+  - 继承 JpaRepository 和 JpaSpecificationExecutor
+  - 添加必要的自定义查询方法
+- 确保 Repository 方法名与 Nest、Gin 版本的查询逻辑一致
+
+### 3. 业务逻辑层（Service）
+- 实现完整的 Service 层，包含所有业务逻辑
+  - AuthService：登录、登出、token 验证
+  - UserService：CRUD、批量删除、分页查询
+  - MenuService：CRUD、获取用户路由
+  - RoleService：CRUD、角色与菜单关联
+  - DepartmentService：CRUD
+  - DictionaryService：CRUD
+- 确保业务逻辑与 Nest、Gin 版本完全一致
+
+### 4. 控制层（Controller）
+- 实现完整的 Controller 层，包含所有 API 端点
+  - 确保 API 路径、请求方法、参数、响应格式与 Nest、Gin 版本一致
+  - 添加适当的 Swagger 注解
+  - 实现统一的响应格式
+
+### 5. 安全与权限
+- 完善 JWT 认证机制
+  - 修复 JwtUtil 中的剩余问题
+  - 实现 JWT 过滤器
+  - 添加权限注解和拦截器
+- 实现基于角色的权限控制
+
+### 6. 工具类与配置
+- 更新密码加密工具类
+- 实现统一的响应结果包装类
+- 配置 JPA 和 Hibernate 属性
+- 确保与 Nest、Gin 版本相同的配置项
+
+### 7. 测试与验证
+- 运行 Maven 编译，确保无编译错误
+- 测试所有 API 端点，确保与 Nest、Gin 版本行为一致
+- 验证数据库连接和数据操作
+- 测试认证和授权功能
+
+## 四、实现优先级
+1. 实体层转换和 Repository 创建
+2. AuthService 和 UserService 实现
+3. 核心 Controller 实现
+4. 其他模块（Menu、Role、Department、Dictionary）
+5. 安全与权限配置
+6. 测试与验证
+
+## 五、预期成果
+- 一个功能完整、与 Nest、Gin 版本 API 一致的 Java 25 + Spring Boot 4.0 后端
+- 完整的 JPA 实体和 Repository
+- 完整的业务逻辑和 API 端点
+- 完善的认证和授权机制
+- 与 Nest、Gin 版本相同的响应格式和错误处理
+
+## 六、技术栈
+- Java 25
+- Spring Boot 4.0
+- Spring Data JPA
+- Hibernate 6.4.4
+- JWT
+- Maven
+- MySQL
+
+## 七、注意事项
+- 严格对齐 Nest、Gin 版本的 API 设计和响应格式
+- 遵循 JPA 最佳实践
+- 确保代码质量和可维护性
+- 测试所有功能点，确保与现有版本行为一致
