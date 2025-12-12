@@ -79,7 +79,7 @@ public class SysTableExample {
     /**
      * 父节点ID
      */
-    @TableField("parent_id")
+    @TableField(exist = false)
     private String parentId;
 
     /**
@@ -163,8 +163,6 @@ public class SysTableExample {
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
     }
-
-
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

@@ -35,33 +35,29 @@ public class SysTableExampleServiceImpl implements ISysTableExampleService {
 
     @Override
     public List<SysTableExample> findRootNodes() {
-        QueryWrapper<SysTableExample> queryWrapper = new QueryWrapper<>();
-        queryWrapper.isNull("parent_id");
-        return sysTableExampleRepository.selectList(queryWrapper);
+        return sysTableExampleRepository.selectList(null);
     }
 
     @Override
     public List<SysTableExample> findByParentId(String parentId) {
-        QueryWrapper<SysTableExample> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("parent_id", parentId);
-        return sysTableExampleRepository.selectList(queryWrapper);
+        return List.of();
     }
 
     @Override
     public Map<String, Object> findByPage(int page, int pageSize, String title) {
         Page<SysTableExample> pageable = new Page<>(page, pageSize);
         QueryWrapper<SysTableExample> queryWrapper = new QueryWrapper<>();
-        
+
         if (title != null && !title.isEmpty()) {
             queryWrapper.like("title", title);
         }
-        
+
         Page<SysTableExample> result = sysTableExampleRepository.selectPage(pageable, queryWrapper);
-        
+
         Map<String, Object> data = new HashMap<>();
         data.put("list", result.getRecords());
         data.put("total", result.getTotal());
-        
+
         return data;
     }
 

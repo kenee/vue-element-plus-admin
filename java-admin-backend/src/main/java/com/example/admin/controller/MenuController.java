@@ -26,7 +26,7 @@ public class MenuController {
 
     @Operation(summary = "获取菜单列表", description = "获取菜单列表")
     @GetMapping
-    @PreAuthorize("hasAuthority('menu:list')")
+
     public ResponseResult<?> getMenuList() {
         return ResponseResult.success(sysMenuService.findAll());
     }
@@ -74,10 +74,11 @@ public class MenuController {
 
     @Operation(summary = "获取路由列表", description = "获取前端路由列表")
     @GetMapping("/routes")
-    @PreAuthorize("hasAuthority('menu:list')")
+
     public ResponseResult<?> getRoutes() {
         // 从SecurityContext中获取当前用户
-        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
         // 假设用户名即为用户ID，实际项目中可能需要从UserDetails中获取用户ID
         String userId = currentUser.getUsername();
         return ResponseResult.success(sysMenuService.getRoutesByUser(userId));
@@ -87,7 +88,8 @@ public class MenuController {
     @GetMapping("/user")
     public ResponseResult<?> getUserMenus() {
         // 从SecurityContext中获取当前用户
-        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
         // 假设用户名即为用户ID，实际项目中可能需要从UserDetails中获取用户ID
         String userId = currentUser.getUsername();
         return ResponseResult.success(sysMenuService.getUserMenus(userId));

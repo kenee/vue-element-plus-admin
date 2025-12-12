@@ -26,7 +26,7 @@ public class DepartmentController {
 
     @Operation(summary = "获取部门列表", description = "获取部门列表")
     @GetMapping
-    @PreAuthorize("hasAuthority('department:list')")
+
     public ResponseResult<?> getDepartmentList() {
         return ResponseResult.success(sysDepartmentService.findAll());
     }

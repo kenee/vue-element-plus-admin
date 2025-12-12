@@ -5,7 +5,7 @@ import com.example.admin.utils.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,10 +29,10 @@ public class CardController {
 
     @Operation(summary = "获取卡片示例列表", description = "获取卡片示例列表，支持分页和搜索")
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('card:list')")
-    public ResponseResult<?> list(@RequestParam(defaultValue = "1") int page, 
-                                  @RequestParam(defaultValue = "10") int pageSize, 
-                                  @RequestParam(required = false) String name) {
+
+    public ResponseResult<?> list(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) String name) {
         var cardList = sysCardExampleService.findByPage(page, pageSize, name);
         var total = sysCardExampleService.getTotal(name);
         // 创建Map包装分页数据

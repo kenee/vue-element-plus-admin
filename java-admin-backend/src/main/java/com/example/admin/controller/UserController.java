@@ -26,7 +26,7 @@ public class UserController {
 
     @Operation(summary = "获取用户列表", description = "获取用户列表")
     @GetMapping
-    @PreAuthorize("hasAuthority('user:list')")
+
     public ResponseResult<?> getUserList() {
         return ResponseResult.success(sysUserService.findAll());
     }
@@ -76,7 +76,8 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseResult<?> getProfile() {
         // 从SecurityContext中获取当前用户
-        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
         // 假设用户名即为用户ID，实际项目中可能需要从UserDetails中获取用户ID
         String userId = currentUser.getUsername();
         SysUser user = sysUserService.findById(userId);

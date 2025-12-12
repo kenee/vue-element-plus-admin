@@ -26,7 +26,7 @@ public class RoleController {
 
     @Operation(summary = "获取角色列表", description = "获取角色列表")
     @GetMapping
-    @PreAuthorize("hasAuthority('role:list')")
+
     public ResponseResult<?> getRoleList() {
         return ResponseResult.success(sysRoleService.findAll());
     }

@@ -27,7 +27,7 @@ public class DictionaryController {
 
     @Operation(summary = "获取字典列表", description = "获取字典列表")
     @GetMapping
-    @PreAuthorize("hasAuthority('dictionary:list')")
+
     public ResponseResult<?> getDictionaryList() {
         return ResponseResult.success(sysDictionaryService.findAll());
     }
@@ -67,7 +67,7 @@ public class DictionaryController {
 
     @Operation(summary = "获取字典项列表", description = "根据字典ID获取字典项列表")
     @GetMapping("/detail")
-    @PreAuthorize("hasAuthority('dictionary:list')")
+
     public ResponseResult<?> getDictionaryItems(@RequestParam String dictId) {
         return ResponseResult.success(sysDictionaryService.findItemsByDictId(dictId));
     }
@@ -83,7 +83,8 @@ public class DictionaryController {
     @Operation(summary = "更新字典项", description = "更新字典项信息")
     @PutMapping("/detail/{id}")
     @PreAuthorize("hasAuthority('dictionary:edit')")
-    public ResponseResult<?> updateDictionaryItem(@PathVariable String id, @RequestBody SysDictionaryItem sysDictionaryItem) {
+    public ResponseResult<?> updateDictionaryItem(@PathVariable String id,
+            @RequestBody SysDictionaryItem sysDictionaryItem) {
         sysDictionaryItem.setId(id);
         SysDictionaryItem updatedItem = sysDictionaryService.updateItem(sysDictionaryItem);
         return ResponseResult.success(updatedItem);

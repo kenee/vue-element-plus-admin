@@ -31,14 +31,14 @@ public class TableController {
 
     @Operation(summary = "获取表格示例列表", description = "获取表格示例列表")
     @GetMapping
-    @PreAuthorize("hasAuthority('table:list')")
+
     public ResponseResult<?> getTableList() {
         return ResponseResult.success(sysTableExampleService.findAll());
     }
 
     @Operation(summary = "获取表格示例详情", description = "根据ID获取表格示例详情")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('table:view')")
+
     public ResponseResult<?> getTableById(@PathVariable String id) {
         SysTableExample tableExample = sysTableExampleService.findById(id);
         return ResponseResult.success(tableExample);
@@ -46,14 +46,14 @@ public class TableController {
 
     @Operation(summary = "获取根节点列表", description = "获取表格示例的根节点列表")
     @GetMapping("/root-nodes")
-    @PreAuthorize("hasAuthority('table:list')")
+
     public ResponseResult<?> getRootNodes() {
         return ResponseResult.success(sysTableExampleService.findRootNodes());
     }
 
     @Operation(summary = "获取子节点列表", description = "根据父节点ID获取子节点列表")
     @GetMapping("/children/{parentId}")
-    @PreAuthorize("hasAuthority('table:list')")
+
     public ResponseResult<?> getChildren(@PathVariable String parentId) {
         return ResponseResult.success(sysTableExampleService.findByParentId(parentId));
     }
@@ -93,10 +93,10 @@ public class TableController {
 
     @Operation(summary = "获取表格示例列表(带分页)", description = "获取表格示例列表，支持分页和搜索")
     @GetMapping("/example/list")
-    @PreAuthorize("hasAuthority('table:list')")
-    public ResponseResult<?> list(@RequestParam(defaultValue = "1") int page, 
-                                  @RequestParam(defaultValue = "10") int pageSize, 
-                                  @RequestParam(required = false) String title) {
+
+    public ResponseResult<?> list(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) String title) {
         return ResponseResult.success(sysTableExampleService.findByPage(page, pageSize, title));
     }
 
@@ -121,7 +121,7 @@ public class TableController {
 
     @Operation(summary = "获取表格示例详情", description = "根据ID获取表格示例详情")
     @GetMapping("/example/detail/{id}")
-    @PreAuthorize("hasAuthority('table:view')")
+
     public ResponseResult<?> get(@PathVariable String id) {
         return ResponseResult.success(sysTableExampleService.findById(id));
     }
