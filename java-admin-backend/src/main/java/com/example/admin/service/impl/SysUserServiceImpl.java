@@ -36,7 +36,9 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Override
     public SysUser findByUsername(String username) {
-        return sysUserRepository.findByUsername(username);
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        return sysUserRepository.selectOne(queryWrapper);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
-    public Page<SysUser> findAll(com.baomidou.mybatisplus.extension.plugins.pagination.Page<SysUser> page) {
+    public Page<SysUser> findAll(Page<SysUser> page) {
         return sysUserRepository.selectPage(page, null);
     }
 
@@ -97,7 +99,9 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public List<SysRole> findRolesByUserId(String userId) {
         // 根据用户ID查询所有关联的角色ID
-        List<SysUserRole> userRoleList = sysUserRoleRepository.findByUserId(userId);
+        QueryWrapper<SysUserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        List<SysUserRole> userRoleList = sysUserRoleRepository.selectList(queryWrapper);
         
         // 从关联记录中提取角色ID列表
         List<String> roleIdList = userRoleList.stream()

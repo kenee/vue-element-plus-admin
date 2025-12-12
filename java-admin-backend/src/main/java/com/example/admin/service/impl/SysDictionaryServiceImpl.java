@@ -1,5 +1,6 @@
 package com.example.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.admin.entity.SysDictionary;
 import com.example.admin.entity.SysDictionaryItem;
 import com.example.admin.repository.SysDictionaryItemRepository;
@@ -66,7 +67,9 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
 
     @Override
     public List<SysDictionaryItem> findItemsByDictId(String dictId) {
-        return sysDictionaryItemRepository.findByDictId(dictId);
+        QueryWrapper<SysDictionaryItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dict_id", dictId);
+        return sysDictionaryItemRepository.selectList(queryWrapper);
     }
 
     @Override

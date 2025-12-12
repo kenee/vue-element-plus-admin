@@ -1,5 +1,6 @@
 package com.example.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.admin.entity.SysTableExample;
 import com.example.admin.repository.SysTableExampleRepository;
 import com.example.admin.service.ISysTableExampleService;
@@ -31,12 +32,16 @@ public class SysTableExampleServiceImpl implements ISysTableExampleService {
 
     @Override
     public List<SysTableExample> findRootNodes() {
-        return sysTableExampleRepository.findRootNodes();
+        QueryWrapper<SysTableExample> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNull("parent_id");
+        return sysTableExampleRepository.selectList(queryWrapper);
     }
 
     @Override
     public List<SysTableExample> findByParentId(String parentId) {
-        return sysTableExampleRepository.findByParentId(parentId);
+        QueryWrapper<SysTableExample> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("parent_id", parentId);
+        return sysTableExampleRepository.selectList(queryWrapper);
     }
 
     @Override
