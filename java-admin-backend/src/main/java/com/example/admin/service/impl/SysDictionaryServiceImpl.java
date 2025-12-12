@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 字典服务实现类
@@ -27,23 +26,24 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
 
     @Override
     public SysDictionary findById(String id) {
-        Optional<SysDictionary> optionalDictionary = sysDictionaryRepository.findById(id);
-        return optionalDictionary.orElse(null);
+        return sysDictionaryRepository.selectById(id);
     }
 
     @Override
     public List<SysDictionary> findAll() {
-        return sysDictionaryRepository.findAll();
+        return sysDictionaryRepository.selectList(null);
     }
 
     @Override
     public SysDictionary saveDictionary(SysDictionary dictionary) {
-        return sysDictionaryRepository.save(dictionary);
+        sysDictionaryRepository.insert(dictionary);
+        return dictionary;
     }
 
     @Override
     public SysDictionary updateDictionary(SysDictionary dictionary) {
-        return sysDictionaryRepository.save(dictionary);
+        sysDictionaryRepository.updateById(dictionary);
+        return dictionary;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
             sysDictionaryItemRepository.deleteByDictId(id);
         }
         // 批量删除字典
-        sysDictionaryRepository.deleteAllById(ids);
+        sysDictionaryRepository.deleteBatchIds(ids);
     }
 
     @Override
@@ -71,12 +71,14 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
 
     @Override
     public SysDictionaryItem saveItem(SysDictionaryItem item) {
-        return sysDictionaryItemRepository.save(item);
+        sysDictionaryItemRepository.insert(item);
+        return item;
     }
 
     @Override
     public SysDictionaryItem updateItem(SysDictionaryItem item) {
-        return sysDictionaryItemRepository.save(item);
+        sysDictionaryItemRepository.updateById(item);
+        return item;
     }
 
     @Override
@@ -86,7 +88,7 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
 
     @Override
     public void deleteItemBatch(List<String> ids) {
-        sysDictionaryItemRepository.deleteAllById(ids);
+        sysDictionaryItemRepository.deleteBatchIds(ids);
     }
 
 }

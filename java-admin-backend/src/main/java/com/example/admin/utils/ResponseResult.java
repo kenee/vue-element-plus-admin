@@ -15,17 +15,12 @@ public class ResponseResult<T> {
     /**
      * 消息
      */
-    private String message;
+    private String msg;
 
     /**
      * 数据
      */
     private T data;
-
-    /**
-     * 成功
-     */
-    private boolean success;
 
     private ResponseResult() {
     }
@@ -39,10 +34,9 @@ public class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> success(T data) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = 200;
-        result.message = "success";
+        result.code = 0;
+        result.msg = "success";
         result.data = data;
-        result.success = true;
         return result;
     }
 
@@ -59,62 +53,59 @@ public class ResponseResult<T> {
     /**
      * 成功响应
      *
-     * @param message 消息
-     * @param data    数据
-     * @param <T>     数据类型
+     * @param msg  消息
+     * @param data 数据
+     * @param <T>  数据类型
      * @return ResponseResult
      */
-    public static <T> ResponseResult<T> success(String message, T data) {
+    public static <T> ResponseResult<T> success(String msg, T data) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = 200;
-        result.message = message;
+        result.code = 0;
+        result.msg = msg;
         result.data = data;
-        result.success = true;
         return result;
     }
 
     /**
      * 失败响应
      *
-     * @param code    状态码
-     * @param message 消息
-     * @param <T>     数据类型
+     * @param code 状态码
+     * @param msg  消息
+     * @param <T>  数据类型
      * @return ResponseResult
      */
-    public static <T> ResponseResult<T> fail(Integer code, String message) {
+    public static <T> ResponseResult<T> fail(Integer code, String msg) {
         ResponseResult<T> result = new ResponseResult<>();
         result.code = code;
-        result.message = message;
-        result.success = false;
+        result.msg = msg;
         return result;
     }
 
     /**
      * 失败响应
      *
-     * @param message 消息
-     * @param <T>     数据类型
+     * @param msg 消息
+     * @param <T> 数据类型
      * @return ResponseResult
      */
-    public static <T> ResponseResult<T> fail(String message) {
-        return fail(500, message);
+    public static <T> ResponseResult<T> fail(String msg) {
+        return fail(500, msg);
     }
 
     /**
      * 失败响应
      *
-     * @param code    状态码
-     * @param message 消息
-     * @param data    数据
-     * @param <T>     数据类型
+     * @param code 状态码
+     * @param msg  消息
+     * @param data 数据
+     * @param <T>  数据类型
      * @return ResponseResult
      */
-    public static <T> ResponseResult<T> fail(Integer code, String message, T data) {
+    public static <T> ResponseResult<T> fail(Integer code, String msg, T data) {
         ResponseResult<T> result = new ResponseResult<>();
         result.code = code;
-        result.message = message;
+        result.msg = msg;
         result.data = data;
-        result.success = false;
         return result;
     }
 
@@ -126,12 +117,12 @@ public class ResponseResult<T> {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public T getData() {
@@ -140,14 +131,6 @@ public class ResponseResult<T> {
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
     }
 
 }

@@ -1,7 +1,11 @@
 package com.example.admin.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -10,8 +14,8 @@ import java.time.LocalDateTime;
  *
  * @author example
  */
-@Entity
-@Table(name = "sys_department")
+@Data
+@TableName("sys_department")
 public class SysDepartment {
 
     private static final long serialVersionUID = 1L;
@@ -19,51 +23,50 @@ public class SysDepartment {
     /**
      * 部门ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 父部门ID
      */
-    @Column(name = "parent_id")
+    @TableField("parent_id")
     private String parentId;
 
     /**
      * 部门名称
      */
-    @Column(name = "name", nullable = false, length = 100)
+    @TableField("name")
     private String name;
 
     /**
      * 排序
      */
-    @Column(name = "sort", nullable = false, columnDefinition = "int default 0")
+    @TableField("sort")
     private Integer sort;
 
     /**
      * 状态：0-禁用，1-启用
      */
-    @Column(name = "status", nullable = false, columnDefinition = "tinyint default 1")
+    @TableField("status")
     private Integer status;
 
     /**
      * 备注
      */
-    @Column(name = "remark", length = 255)
+    @TableField("remark")
     private String remark;
 
     /**
      * 创建时间
      */
-    @Column(name = "created_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6)")
+    @TableField("created_at")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
 
     public String getId() {

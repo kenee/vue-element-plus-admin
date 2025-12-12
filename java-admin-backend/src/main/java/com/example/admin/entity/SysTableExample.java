@@ -1,8 +1,12 @@
 package com.example.admin.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -11,8 +15,8 @@ import java.util.List;
  *
  * @author example
  */
-@Entity
-@Table(name = "sys_table_example")
+@Data
+@TableName("sys_table_example")
 public class SysTableExample {
 
     private static final long serialVersionUID = 1L;
@@ -20,77 +24,80 @@ public class SysTableExample {
     /**
      * 主键ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 作者
      */
-    @Column(name = "author", nullable = false, length = 100)
+    @TableField("author")
     private String author;
 
     /**
      * 标题
      */
-    @Column(name = "title", nullable = false, length = 200)
+    @TableField("title")
     private String title;
 
     /**
      * 内容
      */
-    @Column(name = "content", columnDefinition = "text")
+    @TableField("content")
     private String content;
 
     /**
      * 重要性
      */
-    @Column(name = "importance", nullable = false, columnDefinition = "int default 1")
+    @TableField("importance")
     private Integer importance;
 
     /**
      * 显示时间
      */
-    @Column(name = "display_time", nullable = false)
+    @TableField("display_time")
     private LocalDateTime displayTime;
 
     /**
      * 浏览量
      */
-    @Column(name = "pageviews", nullable = false, columnDefinition = "int default 0")
+    @TableField("pageviews")
     private Integer pageviews;
 
     /**
      * 图片URI
      */
-    @Column(name = "image_uri", length = 500)
+    @TableField("image_uri")
     private String imageUri;
 
     /**
-     * 子节点
+     * 子节点（MyBatis-Plus不直接支持关联映射，后续通过业务逻辑处理）
      */
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OrderBy("id ASC")
-    private List<SysTableExample> children;
+    // @TableField(exist = false) // 表示该字段不映射到数据库
+    // private List<SysTableExample> children;
 
     /**
-     * 父节点
+     * 父节点ID
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private SysTableExample parent;
+    @TableField("parent_id")
+    private String parentId;
+
+    /**
+     * 父节点（MyBatis-Plus不直接支持关联映射，后续通过业务逻辑处理）
+     */
+    // @TableField(exist = false) // 表示该字段不映射到数据库
+    // private SysTableExample parent;
 
     /**
      * 创建时间
      */
-    @Column(name = "created_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6)")
+    @TableField("created_at")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
 
     public String getId() {
@@ -157,21 +164,7 @@ public class SysTableExample {
         this.imageUri = imageUri;
     }
 
-    public List<SysTableExample> getChildren() {
-        return children;
-    }
 
-    public void setChildren(List<SysTableExample> children) {
-        this.children = children;
-    }
-
-    public SysTableExample getParent() {
-        return parent;
-    }
-
-    public void setParent(SysTableExample parent) {
-        this.parent = parent;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

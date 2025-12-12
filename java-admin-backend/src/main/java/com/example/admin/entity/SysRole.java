@@ -4,12 +4,10 @@ import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Column;
-import org.hibernate.annotations.GenericGenerator;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -18,10 +16,10 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author example
  */
+@Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Entity
-@Table(name = "sys_role")
+@TableName("sys_role")
 public class SysRole {
 
     private static final long serialVersionUID = 1L;
@@ -29,46 +27,44 @@ public class SysRole {
     /**
      * 角色ID
      */
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", columnDefinition = "VARCHAR(36)")
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 角色名称
      */
-    @Column(name = "role_name")
+    @TableField("role_name")
     private String roleName;
 
     /**
      * 角色值
      */
-    @Column(name = "role_value")
+    @TableField("role_value")
     private String roleValue;
 
     /**
      * 状态：0-禁用，1-启用
      */
-    @Column(name = "status")
+    @TableField("status")
     private Integer status;
 
     /**
      * 备注
      */
-    @Column(name = "remark")
+    @TableField("remark")
     private String remark;
 
     /**
      * 创建时间
      */
-    @Column(name = "created_at")
+    @TableField("created_at")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
 
     public String getId() {

@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Column;
-import org.hibernate.annotations.GenericGenerator;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -19,10 +17,10 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author example
  */
+@Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Entity
-@Table(name = "sys_menu")
+@TableName("sys_menu")
 public class SysMenu {
 
     private static final long serialVersionUID = 1L;
@@ -30,94 +28,92 @@ public class SysMenu {
     /**
      * 菜单ID
      */
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", columnDefinition = "VARCHAR(36)")
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 路径
      */
-    @Column(name = "path")
+    @TableField("path")
     private String path;
 
     /**
      * 组件
      */
-    @Column(name = "component")
+    @TableField("component")
     private String component;
 
     /**
      * 重定向
      */
-    @Column(name = "redirect")
+    @TableField("redirect")
     private String redirect;
 
     /**
      * 菜单标题
      */
-    @Column(name = "title")
+    @TableField("title")
     private String title;
 
     /**
      * 菜单名称
      */
-    @Column(name = "name")
+    @TableField("name")
     private String name;
 
     /**
      * 图标
      */
-    @Column(name = "icon")
+    @TableField("icon")
     private String icon;
 
     /**
      * 菜单元信息
      */
-    @Column(name = "meta", columnDefinition = "JSON")
+    @TableField("meta")
     private String meta;
 
     /**
      * 类型：0-目录，1-菜单，2-按钮
      */
-    @Column(name = "type")
+    @TableField("type")
     private Integer type;
 
     /**
      * 状态：0-禁用，1-启用
      */
-    @Column(name = "status")
+    @TableField("status")
     private Integer status;
 
     /**
      * 权限标识
      */
-    @Column(name = "permission")
+    @TableField("permission")
     private String permission;
 
     /**
      * 排序
      */
-    @Column(name = "sort")
+    @TableField("sort")
     private Integer sort;
 
     /**
      * 创建时间
      */
-    @Column(name = "created_at")
+    @TableField("created_at")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
 
     /**
      * 父菜单ID
      */
-    @Column(name = "parent_id")
+    @TableField("parent_id")
     private String parentId;
 
     public String getId() {

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 表格示例服务实现类
@@ -22,13 +21,12 @@ public class SysTableExampleServiceImpl implements ISysTableExampleService {
 
     @Override
     public SysTableExample findById(String id) {
-        Optional<SysTableExample> optionalTableExample = sysTableExampleRepository.findById(id);
-        return optionalTableExample.orElse(null);
+        return sysTableExampleRepository.selectById(id);
     }
 
     @Override
     public List<SysTableExample> findAll() {
-        return sysTableExampleRepository.findAll();
+        return sysTableExampleRepository.selectList(null);
     }
 
     @Override
@@ -43,12 +41,14 @@ public class SysTableExampleServiceImpl implements ISysTableExampleService {
 
     @Override
     public SysTableExample saveTableExample(SysTableExample tableExample) {
-        return sysTableExampleRepository.save(tableExample);
+        sysTableExampleRepository.insert(tableExample);
+        return tableExample;
     }
 
     @Override
     public SysTableExample updateTableExample(SysTableExample tableExample) {
-        return sysTableExampleRepository.save(tableExample);
+        sysTableExampleRepository.updateById(tableExample);
+        return tableExample;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SysTableExampleServiceImpl implements ISysTableExampleService {
 
     @Override
     public void deleteBatch(List<String> ids) {
-        sysTableExampleRepository.deleteAllById(ids);
+        sysTableExampleRepository.deleteBatchIds(ids);
     }
 
 }

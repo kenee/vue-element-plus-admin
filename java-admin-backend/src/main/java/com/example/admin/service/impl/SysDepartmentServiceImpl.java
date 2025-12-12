@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 部门服务实现类
@@ -22,23 +21,24 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
 
     @Override
     public SysDepartment findById(String id) {
-        Optional<SysDepartment> optionalDepartment = sysDepartmentRepository.findById(id);
-        return optionalDepartment.orElse(null);
+        return sysDepartmentRepository.selectById(id);
     }
 
     @Override
     public List<SysDepartment> findAll() {
-        return sysDepartmentRepository.findAll();
+        return sysDepartmentRepository.selectList(null);
     }
 
     @Override
     public SysDepartment saveDepartment(SysDepartment department) {
-        return sysDepartmentRepository.save(department);
+        sysDepartmentRepository.insert(department);
+        return department;
     }
 
     @Override
     public SysDepartment updateDepartment(SysDepartment department) {
-        return sysDepartmentRepository.save(department);
+        sysDepartmentRepository.updateById(department);
+        return department;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
 
     @Override
     public void deleteBatch(List<String> ids) {
-        sysDepartmentRepository.deleteAllById(ids);
+        sysDepartmentRepository.deleteBatchIds(ids);
     }
 
 }

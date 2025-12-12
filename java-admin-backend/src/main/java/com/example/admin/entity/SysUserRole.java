@@ -3,12 +3,10 @@ package com.example.admin.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -20,30 +18,52 @@ import jakarta.persistence.GenerationType;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Entity
-@Table(name = "sys_user_role")
+@TableName("sys_user_role")
 public class SysUserRole {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键ID
+     * 主键
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 用户ID
      */
-    @Column(name = "user_id", columnDefinition = "VARCHAR(36)")
+    @TableField("user_id")
     private String userId;
 
     /**
      * 角色ID
      */
-    @Column(name = "role_id", columnDefinition = "VARCHAR(36)")
+    @TableField("role_id")
     private String roleId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
 }

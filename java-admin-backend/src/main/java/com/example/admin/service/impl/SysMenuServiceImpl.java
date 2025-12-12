@@ -25,13 +25,12 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     @Override
     public SysMenu findById(String id) {
-        Optional<SysMenu> optionalMenu = sysMenuRepository.findById(id);
-        return optionalMenu.orElse(null);
+        return sysMenuRepository.selectById(id);
     }
 
     @Override
     public List<SysMenu> findAll() {
-        return sysMenuRepository.findAll();
+        return sysMenuRepository.selectList(null);
     }
 
     @Override
@@ -40,7 +39,8 @@ public class SysMenuServiceImpl implements ISysMenuService {
         if (menu.getName() == null || menu.getName().isEmpty()) {
             menu.setName(generateMenuName(menu.getPath(), menu.getTitle()));
         }
-        return sysMenuRepository.save(menu);
+        sysMenuRepository.insert(menu);
+        return menu;
     }
 
     @Override
@@ -49,7 +49,8 @@ public class SysMenuServiceImpl implements ISysMenuService {
         if (menu.getName() == null || menu.getName().isEmpty()) {
             menu.setName(generateMenuName(menu.getPath(), menu.getTitle()));
         }
-        return sysMenuRepository.save(menu);
+        sysMenuRepository.updateById(menu);
+        return menu;
     }
 
     @Override
@@ -59,13 +60,13 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     @Override
     public void deleteBatch(List<String> ids) {
-        sysMenuRepository.deleteAllById(ids);
+        sysMenuRepository.deleteBatchIds(ids);
     }
 
     @Override
     public List<Map<String, Object>> getRoutesByUser(String userId) {
         // 暂时返回所有菜单，后续需要根据用户角色过滤
-        List<SysMenu> menus = sysMenuRepository.findAll();
+        List<SysMenu> menus = sysMenuRepository.selectList(null);
         List<Map<String, Object>> routes = convertMenusToRoutes(menus);
         return filterHiddenMenus(routes);
     }

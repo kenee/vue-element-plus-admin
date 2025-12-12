@@ -1,18 +1,17 @@
 package com.example.admin.repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.admin.entity.SysDictionary;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
- * 字典表 Repository 接口
+ * 字典表 Mapper 接口
  * </p>
  *
  * @author example
  */
-@Repository
-public interface SysDictionaryRepository extends JpaRepository<SysDictionary, String>, JpaSpecificationExecutor<SysDictionary> {
+@Mapper
+public interface SysDictionaryRepository extends BaseMapper<SysDictionary> {
 
 }

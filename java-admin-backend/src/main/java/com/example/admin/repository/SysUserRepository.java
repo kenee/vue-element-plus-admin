@@ -1,19 +1,18 @@
 package com.example.admin.repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.admin.entity.SysUser;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
- * 用户表 Repository 接口
+ * 用户表 Mapper 接口
  * </p>
  *
  * @author example
  */
-@Repository
-public interface SysUserRepository extends JpaRepository<SysUser, String>, JpaSpecificationExecutor<SysUser> {
+@Mapper
+public interface SysUserRepository extends BaseMapper<SysUser> {
 
     /**
      * 根据用户名查询用户

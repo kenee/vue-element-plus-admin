@@ -8,21 +8,26 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
-    open-in-view: false
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 100MB
+
+# MyBatis-Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.example.admin.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # 开发时打印 SQL
+  global-config:
+    db-config:
+      logic-delete-field: deleted      # 全局逻辑删除字段
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  spring-boot:
+    # 启用 Spring Boot 自动配置
+    enabled: true
 
 server:
   port: 3000

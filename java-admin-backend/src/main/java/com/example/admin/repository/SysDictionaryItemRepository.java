@@ -1,21 +1,20 @@
 package com.example.admin.repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.admin.entity.SysDictionaryItem;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 /**
  * <p>
- * 字典项表 Repository 接口
+ * 字典项表 Mapper 接口
  * </p>
  *
  * @author example
  */
-@Repository
-public interface SysDictionaryItemRepository extends JpaRepository<SysDictionaryItem, String>, JpaSpecificationExecutor<SysDictionaryItem> {
+@Mapper
+public interface SysDictionaryItemRepository extends BaseMapper<SysDictionaryItem> {
 
     /**
      * 根据字典ID查询字典项列表

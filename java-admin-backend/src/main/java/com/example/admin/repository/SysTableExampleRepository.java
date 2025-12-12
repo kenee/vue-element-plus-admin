@@ -1,29 +1,26 @@
 package com.example.admin.repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.admin.entity.SysTableExample;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 /**
  * <p>
- * 表格示例表 Repository 接口
+ * 表格示例表 Mapper 接口
  * </p>
  *
  * @author example
  */
-@Repository
-public interface SysTableExampleRepository extends JpaRepository<SysTableExample, String>, JpaSpecificationExecutor<SysTableExample> {
+@Mapper
+public interface SysTableExampleRepository extends BaseMapper<SysTableExample> {
 
     /**
      * 查询所有根节点
      *
      * @return List<SysTableExample>
      */
-    @Query("SELECT t FROM SysTableExample t WHERE t.parent IS NULL")
     List<SysTableExample> findRootNodes();
 
     /**

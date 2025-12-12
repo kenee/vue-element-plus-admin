@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 角色服务实现类
@@ -22,23 +21,24 @@ public class SysRoleServiceImpl implements ISysRoleService {
 
     @Override
     public SysRole findById(String id) {
-        Optional<SysRole> optionalRole = sysRoleRepository.findById(id);
-        return optionalRole.orElse(null);
+        return sysRoleRepository.selectById(id);
     }
 
     @Override
     public List<SysRole> findAll() {
-        return sysRoleRepository.findAll();
+        return sysRoleRepository.selectList(null);
     }
 
     @Override
     public SysRole saveRole(SysRole role) {
-        return sysRoleRepository.save(role);
+        sysRoleRepository.insert(role);
+        return role;
     }
 
     @Override
     public SysRole updateRole(SysRole role) {
-        return sysRoleRepository.save(role);
+        sysRoleRepository.updateById(role);
+        return role;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
 
     @Override
     public void deleteBatch(List<String> ids) {
-        sysRoleRepository.deleteAllById(ids);
+        sysRoleRepository.deleteBatchIds(ids);
     }
 
 }

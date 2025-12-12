@@ -1,7 +1,11 @@
 package com.example.admin.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -10,8 +14,8 @@ import java.time.LocalDateTime;
  *
  * @author example
  */
-@Entity
-@Table(name = "sys_dictionary_item")
+@Data
+@TableName("sys_dictionary_item")
 public class SysDictionaryItem {
 
     private static final long serialVersionUID = 1L;
@@ -19,59 +23,56 @@ public class SysDictionaryItem {
     /**
      * 字典项ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 字典ID
      */
-    @Column(name = "dict_id", nullable = false)
+    @TableField("dict_id")
     private String dictId;
 
     /**
      * 标签
      */
-    @Column(name = "label", nullable = false, length = 100)
+    @TableField("label")
     private String label;
 
     /**
      * 值
      */
-    @Column(name = "value", nullable = false, length = 100)
+    @TableField("value")
     private String value;
 
     /**
      * 排序
      */
-    @Column(name = "sort", nullable = false, columnDefinition = "int default 0")
+    @TableField("sort")
     private Integer sort;
 
     /**
      * 状态：0-禁用，1-启用
      */
-    @Column(name = "status", nullable = false, columnDefinition = "tinyint default 1")
+    @TableField("status")
     private Integer status;
 
     /**
      * 创建时间
      */
-    @Column(name = "created_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6)")
+    @TableField("created_at")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
 
     /**
-     * 字典对象
+     * 字典对象（MyBatis-Plus不直接支持关联映射，后续通过业务逻辑处理）
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dict_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private SysDictionary dictionary;
+    // private SysDictionary dictionary;
 
     public String getId() {
         return id;
@@ -137,12 +138,6 @@ public class SysDictionaryItem {
         this.updatedAt = updatedAt;
     }
 
-    public SysDictionary getDictionary() {
-        return dictionary;
-    }
 
-    public void setDictionary(SysDictionary dictionary) {
-        this.dictionary = dictionary;
-    }
 
 }

@@ -1,8 +1,12 @@
 package com.example.admin.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -11,8 +15,8 @@ import java.util.List;
  *
  * @author example
  */
-@Entity
-@Table(name = "sys_dictionary")
+@Data
+@TableName("sys_dictionary")
 public class SysDictionary {
 
     private static final long serialVersionUID = 1L;
@@ -20,52 +24,50 @@ public class SysDictionary {
     /**
      * 字典ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 字典名称
      */
-    @Column(name = "dict_name", nullable = false, length = 100)
+    @TableField("dict_name")
     private String dictName;
 
     /**
      * 字典编码
      */
-    @Column(name = "dict_code", nullable = false, length = 100, unique = true)
+    @TableField("dict_code")
     private String dictCode;
 
     /**
      * 状态：0-禁用，1-启用
      */
-    @Column(name = "status", nullable = false, columnDefinition = "tinyint default 1")
+    @TableField("status")
     private Integer status;
 
     /**
      * 备注
      */
-    @Column(name = "remark", length = 255)
+    @TableField("remark")
     private String remark;
 
     /**
      * 创建时间
      */
-    @Column(name = "created_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6)")
+    @TableField("created_at")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
 
     /**
-     * 字典项列表
+     * 字典项列表（MyBatis-Plus不直接支持关联映射，后续通过业务逻辑处理）
      */
-    @OneToMany(mappedBy = "dictionary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SysDictionaryItem> items;
+    // private List<SysDictionaryItem> items;
 
     public String getId() {
         return id;
@@ -123,12 +125,6 @@ public class SysDictionary {
         this.updatedAt = updatedAt;
     }
 
-    public List<SysDictionaryItem> getItems() {
-        return items;
-    }
 
-    public void setItems(List<SysDictionaryItem> items) {
-        this.items = items;
-    }
 
 }

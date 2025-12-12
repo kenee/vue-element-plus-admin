@@ -1,8 +1,8 @@
 package com.example.admin.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.admin.entity.SysRole;
 import com.example.admin.entity.SysUser;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -39,10 +39,10 @@ public interface ISysUserService {
     /**
      * 分页查询用户列表
      *
-     * @param pageable 分页参数
+     * @param page 分页参数
      * @return Page<SysUser>
      */
-    Page<SysUser> findAll(Pageable pageable);
+    Page<SysUser> findAll(Page<SysUser> page);
 
     /**
      * 保存用户（包含密码加密）
@@ -81,5 +81,13 @@ public interface ISysUserService {
      * @param roleIds 角色ID列表
      */
     void assignRoles(String userId, List<String> roleIds);
+
+    /**
+     * 根据用户ID查询用户角色列表
+     *
+     * @param userId 用户ID
+     * @return List<SysRole>
+     */
+    List<SysRole> findRolesByUserId(String userId);
 
 }

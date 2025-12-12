@@ -3,12 +3,10 @@ package com.example.admin.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -20,8 +18,7 @@ import jakarta.persistence.GenerationType;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Entity
-@Table(name = "sys_role_menu")
+@TableName("sys_role_menu")
 public class SysRoleMenu {
 
     private static final long serialVersionUID = 1L;
@@ -29,21 +26,20 @@ public class SysRoleMenu {
     /**
      * 主键ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 角色ID
      */
-    @Column(name = "role_id", columnDefinition = "VARCHAR(36)")
+    @TableField("role_id")
     private String roleId;
 
     /**
      * 菜单ID
      */
-    @Column(name = "menu_id", columnDefinition = "VARCHAR(36)")
+    @TableField("menu_id")
     private String menuId;
 
 }

@@ -1,14 +1,14 @@
 package com.example.admin.repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.admin.entity.SysRoleMenu;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 角色菜单关联Repository
+ * 角色菜单关联Mapper
  *
  * @author example
  */
-@Repository
-public interface SysRoleMenuRepository extends JpaRepository<SysRoleMenu, String> {
+@Mapper
+public interface SysRoleMenuRepository extends BaseMapper<SysRoleMenu> {
 }

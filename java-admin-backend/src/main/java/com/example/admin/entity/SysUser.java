@@ -1,8 +1,11 @@
 package com.example.admin.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -11,8 +14,8 @@ import java.time.LocalDateTime;
  *
  * @author example
  */
-@Entity
-@Table(name = "sys_user")
+@Data
+@TableName("sys_user")
 public class SysUser {
 
     private static final long serialVersionUID = 1L;
@@ -20,57 +23,56 @@ public class SysUser {
     /**
      * 用户ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @TableId(type = IdType.ASSIGN_UUID)
+    @TableField("id")
     private String id;
 
     /**
      * 用户名
      */
-    @Column(name = "username", nullable = false, unique = true, length = 50)
+    @TableField("username")
     private String username;
 
     /**
      * 密码
      */
-    @Column(name = "password", nullable = false, length = 100)
+    @TableField("password")
     private String password;
 
     /**
      * 昵称
      */
-    @Column(name = "nickname", length = 50)
+    @TableField("nickname")
     private String nickname;
 
     /**
      * 邮箱
      */
-    @Column(name = "email", length = 100)
+    @TableField("email")
     private String email;
 
     /**
      * 状态：0-禁用，1-启用
      */
-    @Column(name = "status", nullable = false, columnDefinition = "tinyint default 1")
+    @TableField("status")
     private Integer status;
 
     /**
      * 创建时间
      */
-    @Column(name = "created_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6)")
+    @TableField("created_at")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at", nullable = false, columnDefinition = "datetime(6) default CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
 
     /**
      * 部门ID
      */
-    @Column(name = "dept_id")
+    @TableField("dept_id")
     private String deptId;
 
     // 实体关系映射（后续根据需要添加）

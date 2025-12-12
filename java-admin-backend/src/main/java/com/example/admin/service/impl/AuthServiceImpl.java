@@ -14,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import com.example.admin.entity.SysRole;
 
 /**
  * 认证服务实现类
@@ -77,15 +79,26 @@ public class AuthServiceImpl implements IAuthService {
     public Map<String, Object> generateToken(SysUser user) {
         // 生成token
         String token = jwtUtil.generateToken(user.getUsername());
-        String newRefreshToken = jwtUtil.generateRefreshToken(user.getUsername());
+        
+        // 获取用户角色列表
+        List<SysRole> roles = sysUserService.findRolesByUserId(user.getId());
+        
+        // 构建角色信息（取第一个角色，与gin-admin-backend保持一致）
+        String roleValue = "";
+        String roleId = "";
+        if (roles != null && !roles.isEmpty()) {
+            SysRole role = roles.get(0);
+            roleValue = role.getRoleValue();
+            roleId = role.getId();
+        }
 
-        // 构建响应数据
+        // 构建响应数据，与gin-admin-backend保持一致
         Map<String, Object> tokenMap = new HashMap<>();
-        tokenMap.put("accessToken", token);
-        tokenMap.put("refreshToken", newRefreshToken);
-        tokenMap.put("tokenType", "Bearer");
-        tokenMap.put("expiresIn", jwtUtil.getExpiration());
-        tokenMap.put("user", user);
+        tokenMap.put("access_token", token);
+        tokenMap.put("username", user.getUsername());
+        tokenMap.put("role", roleValue);
+        tokenMap.put("roleId", roleId);
+        tokenMap.put("id", user.getId());
 
         return tokenMap;
     }
