@@ -37,6 +37,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // 获取请求路径
+        String requestPath = request.getRequestURI();
+        
+        // 对允许访问的路径跳过JWT验证
+        if (requestPath.startsWith("/api/auth/login") || requestPath.startsWith("/api/auth/logout") || 
+            requestPath.startsWith("/api/v3/api-docs/") || requestPath.startsWith("/api/swagger-ui")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         // 获取Authorization头
         String authorizationHeader = request.getHeader("Authorization");
 

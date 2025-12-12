@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 /**
@@ -97,13 +98,16 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // 配置授权规则
                 .authorizeHttpRequests(authorize -> authorize
-                        // 允许访问的路径
+                        // 允许访问的路径（相对于上下文路径）
                         .requestMatchers("/auth/login", "/auth/logout", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         // 其他路径需要认证
                         .anyRequest().authenticated()
                 )
                 // 配置JWT过滤器
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // 禁用默认的LogoutFilter，由AuthController处理登出
+                .logout(logout -> logout
+                        .disable());
 
         return http.build();
     }

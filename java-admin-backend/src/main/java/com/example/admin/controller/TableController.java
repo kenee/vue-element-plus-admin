@@ -1,6 +1,8 @@
 package com.example.admin.controller;
 
+import com.example.admin.entity.SysCardExample;
 import com.example.admin.entity.SysTableExample;
+import com.example.admin.service.ISysCardExampleService;
 import com.example.admin.service.ISysTableExampleService;
 import com.example.admin.utils.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +25,9 @@ public class TableController {
 
     @Autowired
     private ISysTableExampleService sysTableExampleService;
+
+    @Autowired
+    private ISysCardExampleService sysCardExampleService;
 
     @Operation(summary = "获取表格示例列表", description = "获取表格示例列表")
     @GetMapping
@@ -86,4 +91,38 @@ public class TableController {
         return ResponseResult.success();
     }
 
+    @Operation(summary = "获取表格示例列表(带分页)", description = "获取表格示例列表，支持分页和搜索")
+    @GetMapping("/example/list")
+    @PreAuthorize("hasAuthority('table:list')")
+    public ResponseResult<?> list(@RequestParam(defaultValue = "1") int page, 
+                                  @RequestParam(defaultValue = "10") int pageSize, 
+                                  @RequestParam(required = false) String title) {
+        return ResponseResult.success(sysTableExampleService.findByPage(page, pageSize, title));
+    }
+
+    @Operation(summary = "保存表格示例", description = "创建或更新表格示例")
+    @PostMapping("/example/save")
+    @PreAuthorize("hasAuthority('table:add')")
+    public ResponseResult<?> save(@RequestBody SysTableExample tableExample) {
+        if (tableExample.getId() != null && !tableExample.getId().isEmpty()) {
+            return ResponseResult.success(sysTableExampleService.updateTableExample(tableExample));
+        } else {
+            return ResponseResult.success(sysTableExampleService.saveTableExample(tableExample));
+        }
+    }
+
+    @Operation(summary = "删除表格示例", description = "删除表格示例")
+    @PostMapping("/example/delete")
+    @PreAuthorize("hasAuthority('table:delete')")
+    public ResponseResult<?> delete(@RequestBody List<String> ids) {
+        sysTableExampleService.deleteBatch(ids);
+        return ResponseResult.success();
+    }
+
+    @Operation(summary = "获取表格示例详情", description = "根据ID获取表格示例详情")
+    @GetMapping("/example/detail/{id}")
+    @PreAuthorize("hasAuthority('table:view')")
+    public ResponseResult<?> get(@PathVariable String id) {
+        return ResponseResult.success(sysTableExampleService.findById(id));
+    }
 }

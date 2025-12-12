@@ -65,23 +65,15 @@ public class DictionaryController {
         return ResponseResult.success();
     }
 
-    @Operation(summary = "批量删除字典", description = "批量删除字典")
-    @DeleteMapping("/batch")
-    @PreAuthorize("hasAuthority('dictionary:delete')")
-    public ResponseResult<?> batchDeleteDictionary(@RequestBody List<String> ids) {
-        sysDictionaryService.deleteBatch(ids);
-        return ResponseResult.success();
-    }
-
     @Operation(summary = "获取字典项列表", description = "根据字典ID获取字典项列表")
-    @GetMapping("/items/{dictId}")
+    @GetMapping("/detail")
     @PreAuthorize("hasAuthority('dictionary:list')")
-    public ResponseResult<?> getDictionaryItems(@PathVariable String dictId) {
+    public ResponseResult<?> getDictionaryItems(@RequestParam String dictId) {
         return ResponseResult.success(sysDictionaryService.findItemsByDictId(dictId));
     }
 
     @Operation(summary = "创建字典项", description = "创建新字典项")
-    @PostMapping("/items")
+    @PostMapping("/detail")
     @PreAuthorize("hasAuthority('dictionary:add')")
     public ResponseResult<?> createDictionaryItem(@RequestBody SysDictionaryItem sysDictionaryItem) {
         SysDictionaryItem savedItem = sysDictionaryService.saveItem(sysDictionaryItem);
@@ -89,7 +81,7 @@ public class DictionaryController {
     }
 
     @Operation(summary = "更新字典项", description = "更新字典项信息")
-    @PutMapping("/items/{id}")
+    @PutMapping("/detail/{id}")
     @PreAuthorize("hasAuthority('dictionary:edit')")
     public ResponseResult<?> updateDictionaryItem(@PathVariable String id, @RequestBody SysDictionaryItem sysDictionaryItem) {
         sysDictionaryItem.setId(id);
@@ -98,18 +90,10 @@ public class DictionaryController {
     }
 
     @Operation(summary = "删除字典项", description = "根据ID删除字典项")
-    @DeleteMapping("/items/{id}")
+    @DeleteMapping("/detail/{id}")
     @PreAuthorize("hasAuthority('dictionary:delete')")
     public ResponseResult<?> deleteDictionaryItem(@PathVariable String id) {
         sysDictionaryService.deleteItem(id);
-        return ResponseResult.success();
-    }
-
-    @Operation(summary = "批量删除字典项", description = "批量删除字典项")
-    @DeleteMapping("/items/batch")
-    @PreAuthorize("hasAuthority('dictionary:delete')")
-    public ResponseResult<?> batchDeleteDictionaryItem(@RequestBody List<String> ids) {
-        sysDictionaryService.deleteItemBatch(ids);
         return ResponseResult.success();
     }
 

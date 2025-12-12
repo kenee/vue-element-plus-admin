@@ -66,6 +66,14 @@ public interface ISysMenuService {
     List<Map<String, Object>> getRoutesByUser(String userId);
 
     /**
+     * 根据用户ID获取菜单列表
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    List<SysMenu> getUserMenus(String userId);
+
+    /**
      * 将菜单转换为路由格式
      *
      * @param menus 菜单列表

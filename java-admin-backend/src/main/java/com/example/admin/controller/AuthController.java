@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @Operation(summary = "用户登出", description = "用户登出")
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseResult<?> logout() {
         return authService.logout();
     }

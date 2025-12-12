@@ -3,6 +3,7 @@ package com.example.admin.service;
 import com.example.admin.entity.SysTableExample;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 表格示例服务接口
@@ -40,6 +41,16 @@ public interface ISysTableExampleService {
      * @return List<SysTableExample>
      */
     List<SysTableExample> findByParentId(String parentId);
+
+    /**
+     * 分页查询表格示例
+     *
+     * @param page 页码
+     * @param pageSize 每页数量
+     * @param title 搜索关键词
+     * @return Map<String, Object> 包含list和total的分页数据
+     */
+    Map<String, Object> findByPage(int page, int pageSize, String title);
 
     /**
      * 保存表格示例

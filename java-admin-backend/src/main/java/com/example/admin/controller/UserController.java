@@ -72,4 +72,15 @@ public class UserController {
         return ResponseResult.success();
     }
 
+    @Operation(summary = "获取用户个人信息", description = "获取当前登录用户的个人信息")
+    @GetMapping("/profile")
+    public ResponseResult<?> getProfile() {
+        // 从SecurityContext中获取当前用户
+        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // 假设用户名即为用户ID，实际项目中可能需要从UserDetails中获取用户ID
+        String userId = currentUser.getUsername();
+        SysUser user = sysUserService.findById(userId);
+        return ResponseResult.success(user);
+    }
+
 }

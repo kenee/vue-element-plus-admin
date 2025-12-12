@@ -1,13 +1,16 @@
 package com.example.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.admin.entity.SysTableExample;
 import com.example.admin.repository.SysTableExampleRepository;
 import com.example.admin.service.ISysTableExampleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 表格示例服务实现类
@@ -42,6 +45,24 @@ public class SysTableExampleServiceImpl implements ISysTableExampleService {
         QueryWrapper<SysTableExample> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("parent_id", parentId);
         return sysTableExampleRepository.selectList(queryWrapper);
+    }
+
+    @Override
+    public Map<String, Object> findByPage(int page, int pageSize, String title) {
+        Page<SysTableExample> pageable = new Page<>(page, pageSize);
+        QueryWrapper<SysTableExample> queryWrapper = new QueryWrapper<>();
+        
+        if (title != null && !title.isEmpty()) {
+            queryWrapper.like("title", title);
+        }
+        
+        Page<SysTableExample> result = sysTableExampleRepository.selectPage(pageable, queryWrapper);
+        
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", result.getRecords());
+        data.put("total", result.getTotal());
+        
+        return data;
     }
 
     @Override

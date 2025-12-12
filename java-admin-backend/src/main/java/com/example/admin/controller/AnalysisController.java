@@ -31,21 +31,21 @@ public class AnalysisController {
     }
 
     @Operation(summary = "获取用户访问来源", description = "获取用户访问来源数据")
-    @GetMapping("/user-access-source")
+    @GetMapping("/userAccessSource")
     @PreAuthorize("hasAuthority('analysis:view')")
     public ResponseResult<?> getUserAccessSource() {
         return ResponseResult.success(sysAnalysisService.getUserAccessSource());
     }
 
     @Operation(summary = "获取每周用户活动", description = "获取每周用户活动数据")
-    @GetMapping("/weekly-user-activity")
+    @GetMapping("/weeklyUserActivity")
     @PreAuthorize("hasAuthority('analysis:view')")
     public ResponseResult<?> getWeeklyUserActivity() {
         return ResponseResult.success(sysAnalysisService.getWeeklyUserActivity());
     }
 
     @Operation(summary = "获取月度销售数据", description = "获取月度销售数据")
-    @GetMapping("/monthly-sales")
+    @GetMapping("/monthlySales")
     @PreAuthorize("hasAuthority('analysis:view')")
     public ResponseResult<?> getMonthlySales() {
         return ResponseResult.success(sysAnalysisService.getMonthlySales());

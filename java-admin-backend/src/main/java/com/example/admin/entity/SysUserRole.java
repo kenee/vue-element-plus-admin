@@ -4,9 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.IdType;
 
 /**
  * <p>
@@ -22,13 +20,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 public class SysUserRole {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 主键
-     */
-    @TableId(type = IdType.ASSIGN_UUID)
-    @TableField("id")
-    private String id;
 
     /**
      * 用户ID
@@ -58,12 +49,6 @@ public class SysUserRole {
         this.roleId = roleId;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
 }

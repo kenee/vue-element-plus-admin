@@ -72,6 +72,12 @@ public class SysMenuServiceImpl implements ISysMenuService {
     }
 
     @Override
+    public List<SysMenu> getUserMenus(String userId) {
+        // 暂时返回所有菜单，后续需要根据用户角色过滤
+        return sysMenuRepository.selectList(null);
+    }
+
+    @Override
     public List<Map<String, Object>> convertMenusToRoutes(List<SysMenu> menus) {
         // 将菜单转换为树形结构
         List<Map<String, Object>> treeMenu = buildMenuTree(menus);
