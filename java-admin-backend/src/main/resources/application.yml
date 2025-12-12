@@ -30,7 +30,7 @@ server:
     context-path: /api
 
 jwt:
-  secret: your-secret-key-change-me
+  secret: 0a0c28773f3b6529ebe4c140f05354aa86fa5da4771d9ed6768137860244bb42
   expiration: 86400000
   refresh-token-expiration: 604800000
 
