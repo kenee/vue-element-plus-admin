@@ -1,7 +1,7 @@
 package com.example.admin.entity;
 
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -76,7 +76,7 @@ public class SysMenu {
      * 菜单元信息
      */
     @Column(name = "meta", columnDefinition = "JSON")
-    private JsonNode meta;
+    private String meta;
 
     /**
      * 类型：0-目录，1-菜单，2-按钮
@@ -176,11 +176,11 @@ public class SysMenu {
         this.icon = icon;
     }
 
-    public JsonNode getMeta() {
+    public String getMeta() {
         return meta;
     }
 
-    public void setMeta(JsonNode meta) {
+    public void setMeta(String meta) {
         this.meta = meta;
     }
 

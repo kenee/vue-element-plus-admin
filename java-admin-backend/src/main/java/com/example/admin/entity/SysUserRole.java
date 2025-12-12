@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 /**
  * <p>
@@ -25,16 +27,22 @@ public class SysUserRole {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户ID
+     * 主键ID
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false)
+    private String id;
+
+    /**
+     * 用户ID
+     */
     @Column(name = "user_id", columnDefinition = "VARCHAR(36)")
     private String userId;
 
     /**
      * 角色ID
      */
-    @Id
     @Column(name = "role_id", columnDefinition = "VARCHAR(36)")
     private String roleId;
 

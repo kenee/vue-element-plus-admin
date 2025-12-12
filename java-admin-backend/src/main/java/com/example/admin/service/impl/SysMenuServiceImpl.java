@@ -3,7 +3,7 @@ package com.example.admin.service.impl;
 import com.example.admin.entity.SysMenu;
 import com.example.admin.repository.SysMenuRepository;
 import com.example.admin.service.ISysMenuService;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,8 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     @Autowired
     private SysMenuRepository sysMenuRepository;
+    
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public SysMenu findById(String id) {
@@ -188,11 +190,15 @@ public class SysMenuServiceImpl implements ISysMenuService {
         if (menu.getPermission() != null) {
             metaMap.put("permission", menu.getPermission());
         }
-        // 从menu.meta中获取其他属性
-        if (menu.getMeta() != null) {
-            menu.getMeta().fields().forEachRemaining(field -> {
-                metaMap.put(field.getKey(), field.getValue());
-            });
+        // 从menu.meta JSON字符串中获取其他属性
+        if (menu.getMeta() != null && !menu.getMeta().isEmpty()) {
+            try {
+                Map<String, Object> additionalMeta = objectMapper.readValue(menu.getMeta(), Map.class);
+                metaMap.putAll(additionalMeta);
+            } catch (Exception e) {
+                // 解析失败，忽略
+                e.printStackTrace();
+            }
         }
         menuMap.put("meta", metaMap);
 

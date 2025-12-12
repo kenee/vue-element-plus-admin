@@ -15,7 +15,7 @@
     <properties>
         <java.version>25</java.version>
         <spring-boot.version>4.0.0</spring-boot.version>
-        <springdoc.version>2.5.0</springdoc.version>
+        <springdoc.version>2.6.0</springdoc.version>
         <jjwt.version>0.12.5</jjwt.version>
         <lombok.version>1.18.34</lombok.version>
         <mysql.version>8.0.33</mysql.version>
@@ -39,11 +39,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.4.4.Final</version>
         </dependency>
 
         <!-- Spring Boot Starter Security -->
