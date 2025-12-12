@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.admin.repository.SysDictionaryItemRepository">
 
-    <select id="findByDictId" resultType="com.example.admin.entity.SysDictionaryItem">
-        SELECT * FROM sys_dictionary_item WHERE dict_id = #{dictId}
+    <!-- 根据字典ID查询字典项 -->
+    <select id="findByDictId" parameterType="String" resultType="com.example.admin.entity.SysDictionaryItem">
+        SELECT * FROM sys_dictionary_item WHERE dict_id = #{dictId} ORDER BY sort ASC
     </select>
-
-    <delete id="deleteByDictId">
-        DELETE FROM sys_dictionary_item WHERE dict_id = #{dictId}
-    </delete>
 
 </mapper>

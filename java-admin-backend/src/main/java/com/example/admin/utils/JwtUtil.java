@@ -31,30 +31,38 @@ public class JwtUtil {
     /**
      * 生成token
      *
-     * @param subject 主题（用户名）
+     * @param userId   用户ID
+     * @param username 用户名
      * @return token
      */
-    public String generateToken(String subject) {
-        return generateToken(subject, new HashMap<>());
+    public String generateToken(String userId, String username) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", userId);
+        claims.put("username", username);
+        return generateToken(userId, username, claims);
     }
 
     /**
      * 生成token
      *
-     * @param subject    主题（用户名）
-     * @param claims     声明
+     * @param userId   用户ID
+     * @param username 用户名
+     * @param claims   声明
      * @return token
      */
-    public String generateToken(String subject, Map<String, Object> claims) {
+    public String generateToken(String userId, String username, Map<String, Object> claims) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(userId) // Subject设置为用户ID，与gin-backend-admin对齐
+                .claim("id", userId)
+                .claim("username", username)
+                .setIssuer("gin-admin")
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), Jwts.SIG.HS256)
                 .compact();
     }
 
@@ -84,7 +92,30 @@ public class JwtUtil {
      */
     public String getUsernameFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
-        return claims.getSubject();
+        // 优先从username声明中获取，兼容gin-backend-admin
+        String username = (String) claims.get("username");
+        if (username == null) {
+            // 兼容旧版Token，从Subject获取
+            username = claims.getSubject();
+        }
+        return username;
+    }
+
+    /**
+     * 从token中获取用户ID
+     *
+     * @param token token
+     * @return 用户ID
+     */
+    public String getUserIdFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        // 优先从id声明中获取
+        String userId = (String) claims.get("id");
+        if (userId == null || userId.isEmpty()) {
+            // 如果id声明为空，使用Subject作为用户ID，与gin-backend-admin对齐
+            userId = claims.getSubject();
+        }
+        return userId;
     }
 
     /**

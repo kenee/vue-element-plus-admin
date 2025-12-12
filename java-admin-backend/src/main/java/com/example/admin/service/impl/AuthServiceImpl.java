@@ -77,8 +77,8 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public Map<String, Object> generateToken(SysUser user) {
-        // 生成token
-        String token = jwtUtil.generateToken(user.getUsername());
+        // 生成token，使用userId和username，与gin-backend-admin对齐
+        String token = jwtUtil.generateToken(user.getId(), user.getUsername());
         
         // 获取用户角色列表
         List<SysRole> roles = sysUserService.findRolesByUserId(user.getId());

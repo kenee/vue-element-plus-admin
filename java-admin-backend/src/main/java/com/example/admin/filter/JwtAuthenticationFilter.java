@@ -41,14 +41,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
+        String userId = null;
         String token = null;
 
-        // 检查Authorization头是否存在且格式正确
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.substring(7);
+        // 检查Authorization头是否存在
+        if (authorizationHeader != null) {
+            // 支持两种Token格式："Bearer <token>" 和直接传递token
+            if (authorizationHeader.startsWith("Bearer ")) {
+                token = authorizationHeader.substring(7);
+            } else {
+                token = authorizationHeader;
+            }
             try {
                 // 从token中获取用户名
                 username = jwtUtil.getUsernameFromToken(token);
+                // 从token中获取用户ID
+                userId = jwtUtil.getUserIdFromToken(token);
             } catch (Exception e) {
                 // token无效
                 logger.error("JWT token invalid: {}", e.getMessage());

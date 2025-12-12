@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.admin.repository.SysUserRoleRepository">
+
+    <!-- 根据用户ID查询所有关联的角色ID -->
+    <select id="findByUserId" parameterType="String" resultType="com.example.admin.entity.SysUserRole">
+        SELECT * FROM sys_user_role WHERE user_id = #{userId}
+    </select>
+
+</mapper>
