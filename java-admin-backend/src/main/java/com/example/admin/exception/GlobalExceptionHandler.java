@@ -3,8 +3,6 @@ package com.example.admin.exception;
 import com.example.admin.utils.ResponseResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,13 +31,12 @@ public class GlobalExceptionHandler {
      *
      * @param ex      异常
      * @param request 请求
-     * @return ResponseEntity
+     * @return ResponseResult
      */
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ResponseResult<?>> handleBusinessException(BusinessException ex, WebRequest request) {
+    public ResponseResult<?> handleBusinessException(BusinessException ex, WebRequest request) {
         logger.error("Business exception: {}, request: {}", ex.getMessage(), request.getDescription(false));
-        ResponseResult<?> responseResult = ResponseResult.fail(ex.getCode(), ex.getMessage());
-        return new ResponseEntity<>(responseResult, HttpStatus.valueOf(ex.getCode()));
+        return ResponseResult.fail(ex.getCode(), ex.getMessage());
     }
 
     /**
@@ -47,10 +44,10 @@ public class GlobalExceptionHandler {
      *
      * @param ex      异常
      * @param request 请求
-     * @return ResponseEntity
+     * @return ResponseResult
      */
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ResponseResult<?>> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
+    public ResponseResult<?> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
         logger.error("Authentication exception: {}, request: {}", ex.getMessage(), request.getDescription(false));
         String message;
         if (ex instanceof BadCredentialsException) {
@@ -60,8 +57,7 @@ public class GlobalExceptionHandler {
         } else {
             message = "认证失败";
         }
-        ResponseResult<?> responseResult = ResponseResult.fail(HttpStatus.UNAUTHORIZED.value(), message);
-        return new ResponseEntity<>(responseResult, HttpStatus.UNAUTHORIZED);
+        return ResponseResult.fail(401, message);
     }
 
     /**
@@ -69,18 +65,17 @@ public class GlobalExceptionHandler {
      *
      * @param ex      异常
      * @param request 请求
-     * @return ResponseEntity
+     * @return ResponseResult
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseResult<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
+    public ResponseResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
         logger.error("Validation exception: {}, request: {}", ex.getMessage(), request.getDescription(false));
         BindingResult bindingResult = ex.getBindingResult();
         Map<String, String> errors = new HashMap<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-        ResponseResult<?> responseResult = ResponseResult.fail(HttpStatus.BAD_REQUEST.value(), "参数验证失败", errors);
-        return new ResponseEntity<>(responseResult, HttpStatus.BAD_REQUEST);
+        return ResponseResult.fail(400, "参数验证失败", errors);
     }
 
     /**
@@ -88,13 +83,12 @@ public class GlobalExceptionHandler {
      *
      * @param ex      异常
      * @param request 请求
-     * @return ResponseEntity
+     * @return ResponseResult
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseResult<?>> handleException(Exception ex, WebRequest request) {
+    public ResponseResult<?> handleException(Exception ex, WebRequest request) {
         logger.error("Unexpected exception: {}, request: {}", ex.getMessage(), request.getDescription(false), ex);
-        ResponseResult<?> responseResult = ResponseResult.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
-        return new ResponseEntity<>(responseResult, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseResult.fail(500, "服务器内部错误");
     }
 
 }
