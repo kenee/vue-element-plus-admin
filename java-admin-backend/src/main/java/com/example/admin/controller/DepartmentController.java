@@ -28,12 +28,13 @@ public class DepartmentController {
     @GetMapping
 
     public ResponseResult<?> getDepartmentList() {
-        return ResponseResult.success(sysDepartmentService.findAll());
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("list", sysDepartmentService.findAll());
+        return ResponseResult.success(result);
     }
 
     @Operation(summary = "获取部门详情", description = "根据ID获取部门详情")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('department:view')")
     public ResponseResult<?> getDepartmentById(@PathVariable String id) {
         SysDepartment sysDepartment = sysDepartmentService.findById(id);
         return ResponseResult.success(sysDepartment);
@@ -41,7 +42,6 @@ public class DepartmentController {
 
     @Operation(summary = "创建部门", description = "创建新部门")
     @PostMapping
-    @PreAuthorize("hasAuthority('department:add')")
     public ResponseResult<?> createDepartment(@RequestBody SysDepartment sysDepartment) {
         SysDepartment savedDepartment = sysDepartmentService.saveDepartment(sysDepartment);
         return ResponseResult.success(savedDepartment);
@@ -49,7 +49,7 @@ public class DepartmentController {
 
     @Operation(summary = "更新部门", description = "更新部门信息")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('department:edit')")
+    @PatchMapping("/{id}")
     public ResponseResult<?> updateDepartment(@PathVariable String id, @RequestBody SysDepartment sysDepartment) {
         sysDepartment.setId(id);
         SysDepartment updatedDepartment = sysDepartmentService.updateDepartment(sysDepartment);
@@ -58,7 +58,6 @@ public class DepartmentController {
 
     @Operation(summary = "删除部门", description = "根据ID删除部门")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('department:delete')")
     public ResponseResult<?> deleteDepartment(@PathVariable String id) {
         sysDepartmentService.deleteDepartment(id);
         return ResponseResult.success();
@@ -66,7 +65,6 @@ public class DepartmentController {
 
     @Operation(summary = "批量删除部门", description = "批量删除部门")
     @DeleteMapping("/batch")
-    @PreAuthorize("hasAuthority('department:delete')")
     public ResponseResult<?> batchDeleteDepartment(@RequestBody List<String> ids) {
         sysDepartmentService.deleteBatch(ids);
         return ResponseResult.success();

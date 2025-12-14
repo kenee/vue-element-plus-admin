@@ -9,6 +9,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 
 /**
  * <p>
@@ -69,10 +72,18 @@ public class SysMenu {
     private String icon;
 
     /**
-     * 菜单元信息
+     * 菜单元信息（数据库存储的JSON字符串）
      */
     @TableField("meta")
+    @JsonIgnore
     private String meta;
+
+    /**
+     * 菜单元信息（对象形式，用于前端）
+     */
+    @TableField(exist = false)
+    @JsonProperty("meta")
+    private Map<String, Object> metaObj;
 
     /**
      * 类型：0-目录，1-菜单，2-按钮
@@ -234,6 +245,14 @@ public class SysMenu {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public Map<String, Object> getMetaObj() {
+        return metaObj;
+    }
+
+    public void setMetaObj(Map<String, Object> metaObj) {
+        this.metaObj = metaObj;
     }
 
 }

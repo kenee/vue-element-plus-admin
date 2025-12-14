@@ -3,6 +3,9 @@ package com.example.admin.controller;
 import com.example.admin.entity.SysUser;
 import com.example.admin.service.ISysUserService;
 import com.example.admin.utils.ResponseResult;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import java.util.HashMap;
+import java.util.Map;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +30,31 @@ public class UserController {
     @Operation(summary = "获取用户列表", description = "获取用户列表")
     @GetMapping
 
-    public ResponseResult<?> getUserList() {
-        return ResponseResult.success(sysUserService.findAll());
+    public ResponseResult<?> getUserList(
+            @RequestParam(name = "page", defaultValue = "1") Long page,
+            @RequestParam(name = "pageSize", defaultValue = "10") Long pageSize,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String nickname,
+            @RequestParam(required = false) String deptId) {
+        Page<SysUser> pageParam = new Page<>(page, pageSize);
+        SysUser userQuery = new SysUser();
+        if (username != null) {
+            userQuery.setUsername(username);
+        }
+        if (nickname != null) {
+            userQuery.setNickname(nickname);
+        }
+        if (deptId != null) {
+            userQuery.setDeptId(deptId);
+        }
+
+        Page<SysUser> result = sysUserService.getUserList(pageParam, userQuery);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", result.getRecords());
+        map.put("total", result.getTotal());
+
+        return ResponseResult.success(map);
     }
 
     @Operation(summary = "获取用户详情", description = "根据ID获取用户详情")

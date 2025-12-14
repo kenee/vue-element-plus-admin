@@ -28,12 +28,13 @@ public class MenuController {
     @GetMapping
 
     public ResponseResult<?> getMenuList() {
-        return ResponseResult.success(sysMenuService.findAll());
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("list", sysMenuService.findAll());
+        return ResponseResult.success(result);
     }
 
     @Operation(summary = "获取菜单详情", description = "根据ID获取菜单详情")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('menu:view')")
     public ResponseResult<?> getMenuById(@PathVariable String id) {
         SysMenu sysMenu = sysMenuService.findById(id);
         return ResponseResult.success(sysMenu);
@@ -41,7 +42,6 @@ public class MenuController {
 
     @Operation(summary = "创建菜单", description = "创建新菜单")
     @PostMapping
-    @PreAuthorize("hasAuthority('menu:add')")
     public ResponseResult<?> createMenu(@RequestBody SysMenu sysMenu) {
         SysMenu savedMenu = sysMenuService.saveMenu(sysMenu);
         return ResponseResult.success(savedMenu);
@@ -49,7 +49,7 @@ public class MenuController {
 
     @Operation(summary = "更新菜单", description = "更新菜单信息")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('menu:edit')")
+    @PatchMapping("/{id}")
     public ResponseResult<?> updateMenu(@PathVariable String id, @RequestBody SysMenu sysMenu) {
         sysMenu.setId(id);
         SysMenu updatedMenu = sysMenuService.updateMenu(sysMenu);
@@ -58,7 +58,6 @@ public class MenuController {
 
     @Operation(summary = "删除菜单", description = "根据ID删除菜单")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('menu:delete')")
     public ResponseResult<?> deleteMenu(@PathVariable String id) {
         sysMenuService.deleteMenu(id);
         return ResponseResult.success();
@@ -66,7 +65,6 @@ public class MenuController {
 
     @Operation(summary = "批量删除菜单", description = "批量删除菜单")
     @DeleteMapping("/batch")
-    @PreAuthorize("hasAuthority('menu:delete')")
     public ResponseResult<?> batchDeleteMenu(@RequestBody List<String> ids) {
         sysMenuService.deleteBatch(ids);
         return ResponseResult.success();

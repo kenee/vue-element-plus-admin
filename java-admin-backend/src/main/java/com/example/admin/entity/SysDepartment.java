@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * <p>
@@ -37,6 +38,7 @@ public class SysDepartment {
      * 部门名称
      */
     @TableField("name")
+    @JsonProperty("departmentName")
     private String name;
 
     /**
@@ -61,12 +63,14 @@ public class SysDepartment {
      * 创建时间
      */
     @TableField("created_at")
+    @JsonProperty("createTime")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
     @TableField("updated_at")
+    @JsonProperty("updateTime")
     private LocalDateTime updatedAt;
 
     public String getId() {

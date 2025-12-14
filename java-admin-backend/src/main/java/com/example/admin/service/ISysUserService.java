@@ -37,6 +37,15 @@ public interface ISysUserService {
     List<SysUser> findAll();
 
     /**
+     * 分页查询用户列表（带条件）
+     *
+     * @param page      分页参数
+     * @param userQuery 查询条件
+     * @return Page<SysUser>
+     */
+    Page<SysUser> getUserList(Page<SysUser> page, SysUser userQuery);
+
+    /**
      * 分页查询用户列表
      *
      * @param page 分页参数

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * <p>
@@ -61,12 +62,14 @@ public class SysUser {
      * 创建时间
      */
     @TableField("created_at")
+    @JsonProperty("createTime")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
     @TableField("updated_at")
+    @JsonProperty("updateTime")
     private LocalDateTime updatedAt;
 
     /**
@@ -75,10 +78,28 @@ public class SysUser {
     @TableField("dept_id")
     private String deptId;
 
-    // 实体关系映射（后续根据需要添加）
-    // @ManyToOne
-    // @JoinColumn(name = "dept_id")
-    // private SysDepartment department;
+    // 实体关系映射
+    @TableField(exist = false)
+    private SysDepartment department;
+
+    @TableField(exist = false)
+    private java.util.List<SysRole> roles;
+
+    public SysDepartment getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(SysDepartment department) {
+        this.department = department;
+    }
+
+    public java.util.List<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(java.util.List<SysRole> roles) {
+        this.roles = roles;
+    }
 
     public String getId() {
         return id;

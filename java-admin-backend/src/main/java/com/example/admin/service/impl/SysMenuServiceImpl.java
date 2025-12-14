@@ -20,7 +20,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     @Autowired
     private SysMenuRepository sysMenuRepository;
-    
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -30,7 +30,45 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     @Override
     public List<SysMenu> findAll() {
-        return sysMenuRepository.selectList(null);
+        List<SysMenu> menus = sysMenuRepository.selectList(null);
+        // Parse meta JSON for each menu
+        for (SysMenu menu : menus) {
+            parseMetaJson(menu);
+        }
+        return menus;
+    }
+
+    /**
+     * Parse meta JSON string to Map object
+     */
+    @SuppressWarnings("unchecked")
+    private void parseMetaJson(SysMenu menu) {
+        if (menu.getMeta() != null && !menu.getMeta().isEmpty()) {
+            try {
+                Map<String, Object> metaMap = objectMapper.readValue(menu.getMeta(), Map.class);
+                menu.setMetaObj(metaMap);
+            } catch (Exception e) {
+                // If parsing fails, create a basic meta object
+                Map<String, Object> metaMap = new HashMap<>();
+                if (menu.getTitle() != null) {
+                    metaMap.put("title", menu.getTitle());
+                }
+                if (menu.getIcon() != null) {
+                    metaMap.put("icon", menu.getIcon());
+                }
+                menu.setMetaObj(metaMap);
+            }
+        } else {
+            // Create basic meta object
+            Map<String, Object> metaMap = new HashMap<>();
+            if (menu.getTitle() != null) {
+                metaMap.put("title", menu.getTitle());
+            }
+            if (menu.getIcon() != null) {
+                metaMap.put("icon", menu.getIcon());
+            }
+            menu.setMetaObj(metaMap);
+        }
     }
 
     @Override
@@ -122,7 +160,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public String generateMenuName(String path, String title) {
         if (path == null || path.isEmpty()) {
-            return title != null ? title.replaceAll("\\s+", "") : "";  
+            return title != null ? title.replaceAll("\\s+", "") : "";
         }
         // 从路径生成菜单名称，例如 /system/user -> SystemUser
         String[] parts = path.split("/");
@@ -160,7 +198,8 @@ public class SysMenuServiceImpl implements ISysMenuService {
                 // 子菜单，添加到父菜单的children中
                 Map<String, Object> parentMenu = menuMap.get(parentId);
                 if (parentMenu != null) {
-                    List<Map<String, Object>> children = (List<Map<String, Object>>) parentMenu.computeIfAbsent("children", k -> new ArrayList<>());
+                    List<Map<String, Object>> children = (List<Map<String, Object>>) parentMenu
+                            .computeIfAbsent("children", k -> new ArrayList<>());
                     children.add(menuNode);
                 }
             }

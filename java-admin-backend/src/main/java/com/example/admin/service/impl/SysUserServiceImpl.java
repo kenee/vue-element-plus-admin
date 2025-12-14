@@ -8,6 +8,7 @@ import com.example.admin.entity.SysUserRole;
 import com.example.admin.repository.SysUserRepository;
 import com.example.admin.repository.SysUserRoleRepository;
 import com.example.admin.repository.SysRoleRepository;
+import com.example.admin.repository.SysDepartmentRepository;
 import com.example.admin.service.ISysUserService;
 import com.example.admin.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class SysUserServiceImpl implements ISysUserService {
     @Autowired
     private SysRoleRepository sysRoleRepository;
 
+    @Autowired
+    private SysDepartmentRepository sysDepartmentRepository;
+
     @Override
     public SysUser findByUsername(String username) {
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
@@ -49,6 +53,37 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public List<SysUser> findAll() {
         return sysUserRepository.selectList(null);
+    }
+
+    @Override
+    public Page<SysUser> getUserList(Page<SysUser> page, SysUser userQuery) {
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        if (userQuery != null) {
+            if (userQuery.getUsername() != null && !userQuery.getUsername().isEmpty()) {
+                queryWrapper.like("username", userQuery.getUsername());
+            }
+            if (userQuery.getNickname() != null && !userQuery.getNickname().isEmpty()) {
+                queryWrapper.like("nickname", userQuery.getNickname());
+            }
+            if (userQuery.getDeptId() != null && !userQuery.getDeptId().isEmpty()) {
+                queryWrapper.eq("dept_id", userQuery.getDeptId());
+            }
+        }
+        Page<SysUser> result = sysUserRepository.selectPage(page, queryWrapper);
+        if (result.getRecords() != null && !result.getRecords().isEmpty()) {
+            for (SysUser user : result.getRecords()) {
+                if (user.getDeptId() != null) {
+                    user.setDepartment(sysDepartmentRepository.selectById(user.getDeptId()));
+                }
+                try {
+                    user.setRoles(findRolesByUserId(user.getId()));
+                } catch (Exception e) {
+                    // Ignore or log if role fetching fails
+                    user.setRoles(new ArrayList<>());
+                }
+            }
+        }
+        return result;
     }
 
     @Override
@@ -102,12 +137,12 @@ public class SysUserServiceImpl implements ISysUserService {
         QueryWrapper<SysUserRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
         List<SysUserRole> userRoleList = sysUserRoleRepository.selectList(queryWrapper);
-        
+
         // 从关联记录中提取角色ID列表
         List<String> roleIdList = userRoleList.stream()
                 .map(role -> role.getRoleId())
                 .collect(Collectors.toList());
-        
+
         // 根据角色ID列表查询对应的角色对象
         return sysRoleRepository.selectBatchIds(roleIdList);
     }
